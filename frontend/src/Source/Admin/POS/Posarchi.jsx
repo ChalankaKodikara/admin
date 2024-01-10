@@ -171,8 +171,8 @@ export default function Posarchi() {
                   <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
                 </Box>
                 <Box sx={{ display: "flex" }}>
-                  <Typography variant="h6" style={{ marginTop: "10px" }}>
-                    Total: ${calculateCartTotal().toFixed(2)}
+                  <Typography gutterBottom variant="h5" component="div">
+                    Total: Rs. {calculateCartTotal().toFixed(2)}
                   </Typography>
                 </Box>
                 <Button
