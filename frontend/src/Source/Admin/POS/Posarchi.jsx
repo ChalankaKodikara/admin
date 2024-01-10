@@ -156,15 +156,7 @@ export default function Posarchi() {
             <Grid item xs={4}>
               <Item>
                 <Box sx={{ display: "flex" }}>
-                  <Typography
-                    component="h1"
-                    variant="h6"
-                    color="inherit"
-                    noWrap
-                    sx={{ flexGrow: 1 }}
-                  >
-                    Cart
-                  </Typography>
+                  
                   <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
                 </Box>
               </Item>

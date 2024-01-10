@@ -3,8 +3,9 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
-export default function ShoppingCart({ cart, handleOpenModal }) {
+export default function ShoppingCart({ cart, handleOpenModal, removeFromCart }) {
   return (
     <div style={{ marginTop: "20px" }}>
       {cart.map((product) => (
@@ -15,7 +16,6 @@ export default function ShoppingCart({ cart, handleOpenModal }) {
               maxWidth: 500,
               margin: 5,
             }}
-            onClick={() => handleOpenModal(product)}
           >
             <CardMedia
               component="img"
@@ -29,13 +29,25 @@ export default function ShoppingCart({ cart, handleOpenModal }) {
             />
             <CardContent sx={{
               flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
             }}>
-              <Typography gutterBottom variant="h8" component="div">
-                {product.name}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Price: {product.price}
-              </Typography>
+              <div>
+                <Typography gutterBottom variant="h6" component="div">
+                  {product.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Price: {product.price}
+                </Typography>
+              </div>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => removeFromCart(product.id)}
+              >
+                Remove from Cart
+              </Button>
             </CardContent>
           </Card>
           <hr />
