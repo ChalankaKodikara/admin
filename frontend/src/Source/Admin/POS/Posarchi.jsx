@@ -24,9 +24,12 @@ function Item(props) {
     </Paper>
   );
 }
+
 export default function Posarchi() {
   const [open, setOpen] = React.useState(true);
   const [cart, setCart] = React.useState([]);
+  console.log("Cart contents:", cart);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -37,6 +40,15 @@ export default function Posarchi() {
     const updatedCart = cart.filter((item) => item.id !== productId);
     setCart(updatedCart);
   };
+
+  // Calculate total price of all items in the cart
+  const calculateCartTotal = () => {
+    return cart.reduce(
+      (total, product) => total + parseFloat(product.price),
+      0
+    );
+  };
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
@@ -156,9 +168,11 @@ export default function Posarchi() {
             <Grid item xs={4}>
               <Item>
                 <Box sx={{ display: "flex" }}>
-                  
                   <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
                 </Box>
+                <Typography variant="h6" style={{ marginTop: "10px" }}>
+                  Total: ${calculateCartTotal().toFixed(2)}
+                </Typography>
               </Item>
             </Grid>
           </Grid>
