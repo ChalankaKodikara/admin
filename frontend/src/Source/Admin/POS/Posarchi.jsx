@@ -15,6 +15,7 @@ import { mainListItems } from "../listitems";
 import { AppBar, Drawer, mdTheme } from "../Structure";
 import Button from "@mui/material/Button";
 import Itemcard from "./Itemcard";
+import ShoppingCart from "./ShoppingCart";
 
 function Item(props) {
   return (
@@ -23,14 +24,19 @@ function Item(props) {
     </Paper>
   );
 }
-
-export default function Pos() {
+export default function Posarchi() {
   const [open, setOpen] = React.useState(true);
-
+  const [cart, setCart] = React.useState([]);
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
+  const addToCart = (product) => {
+    setCart([...cart, product]);
+  };
+  const removeFromCart = (productId) => {
+    const updatedCart = cart.filter((item) => item.id !== productId);
+    setCart(updatedCart);
+  };
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
@@ -133,10 +139,12 @@ export default function Pos() {
                       </Button>
                     </div>
                     <br />
-
                     <div className="items">
-                      <Itemcard />
-                      
+                      <Itemcard
+                        addToCart={addToCart}
+                        removeFromCart={removeFromCart}
+                        cart={cart}
+                      />
                     </div>
                   </div>
                   <br />
@@ -146,7 +154,20 @@ export default function Pos() {
               </Item>
             </Grid>
             <Grid item xs={4}>
-              <Item></Item>
+              <Item>
+                <Box sx={{ display: "flex" }}>
+                  <Typography
+                    component="h1"
+                    variant="h6"
+                    color="inherit"
+                    noWrap
+                    sx={{ flexGrow: 1 }}
+                  >
+                    Cart
+                  </Typography>
+                  <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
+                </Box>
+              </Item>
             </Grid>
           </Grid>
         </Box>

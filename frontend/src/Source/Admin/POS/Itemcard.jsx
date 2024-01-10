@@ -5,18 +5,17 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea, Modal, Box, Button } from "@mui/material";
 import axios from "axios";
-
-export default function ProductList() {
+export default function Itemcard({ addToCart, removeFromCart, cart }) {
   const [productData, setProductData] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://backfood.tfdatamaster.com/api/v1/data/items");
+        const response = await axios.get(
+          "https://backfood.tfdatamaster.com/api/v1/data/items"
+        );
         console.log("API Response:", response.data);
-
         const formattedProductData = response.data.map((product) => ({
           id: product._id,
           name: product.name,
@@ -25,32 +24,42 @@ export default function ProductList() {
           promotionStatus: product.promotionStatus,
           image: product.image,
         }));
-
         console.log("Product Data:", formattedProductData);
         setProductData(formattedProductData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, []);
-
   const handleOpenModal = (product) => {
     setSelectedProduct(product);
     setModalOpen(true);
   };
-
   const handleCloseModal = () => {
     setModalOpen(false);
   };
-
+  const handleAddToCart = () => {
+    if (selectedProduct) {
+      addToCart(selectedProduct);
+      handleCloseModal();
+    }
+  };
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
       {productData.map((product) => (
-        <Card key={product.id} sx={{ maxWidth: 500, margin: 5 }} onClick={() => handleOpenModal(product)}>
+        <Card
+          key={product.id}
+          sx={{ maxWidth: 500, margin: 5 }}
+          onClick={() => handleOpenModal(product)}
+        >
           <CardActionArea style={{ width: 200, height: 300 }}>
-            <CardMedia component="img" alt={product.name} height="140" src={`data:image/jpeg;base64,${product.image}`} />
+            <CardMedia
+              component="img"
+              alt={product.name}
+              height="140"
+              src={`data:image/jpeg;base64,${product.image}`}
+            />
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
                 {product.name}
@@ -66,8 +75,21 @@ export default function ProductList() {
         </Card>
       ))}
       <Modal open={modalOpen} onClose={handleCloseModal}>
-        <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 400, bgcolor: "background.paper", boxShadow: 24, p: 4 }}>
-          <Typography variant="h6">{selectedProduct && selectedProduct.name}</Typography>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Typography variant="h6">
+            {selectedProduct && selectedProduct.name}
+          </Typography>
           <Typography variant="body2" color="text.secondary">
             Price: {selectedProduct && selectedProduct.price}
           </Typography>
@@ -75,6 +97,19 @@ export default function ProductList() {
             {selectedProduct && selectedProduct.description}
           </Typography>
           <Button onClick={handleCloseModal}>Close</Button>
+          <br />
+          <Button
+            variant="contained"
+            style={{
+              marginRight: "10px",
+              width: "200px",
+              height: "40px",
+              borderRadius: "10px",
+            }}
+            onClick={handleAddToCart}
+          >
+            Add to Cart
+          </Button>
         </Box>
       </Modal>
     </div>
