@@ -170,9 +170,21 @@ export default function Posarchi() {
                 <Box sx={{ display: "flex" }}>
                   <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
                 </Box>
-                <Typography variant="h6" style={{ marginTop: "10px" }}>
-                  Total: ${calculateCartTotal().toFixed(2)}
-                </Typography>
+                <Box sx={{ display: "flex" }}>
+                  <Typography variant="h6" style={{ marginTop: "10px" }}>
+                    Total: ${calculateCartTotal().toFixed(2)}
+                  </Typography>
+                </Box>
+                <Button
+                  variant="contained"
+                  style={{
+                    width: "500px",
+                    height: "50px",
+                    borderRadius: "10px",
+                  }}
+                >
+                  Check Out
+                </Button>
               </Item>
             </Grid>
           </Grid>
