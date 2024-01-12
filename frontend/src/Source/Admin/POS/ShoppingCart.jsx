@@ -50,7 +50,7 @@ export default function ShoppingCart({
                 color="error"
                 onClick={() => removeFromCart(product.id)}
               >
-                Remove from Cart
+                Remove 
               </Button>
             </CardContent>
           </Card>

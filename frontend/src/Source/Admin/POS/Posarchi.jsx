@@ -229,7 +229,7 @@ export default function Posarchi() {
                 </div>
               </Item>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Item>
                 <Box sx={{ display: "flex" }}>
                   <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
@@ -242,7 +242,7 @@ export default function Posarchi() {
                 <Button
                   variant="contained"
                   style={{
-                    width: "500px",
+                    width: "200px",
                     height: "50px",
                     borderRadius: "10px",
                   }}
@@ -258,8 +258,8 @@ export default function Posarchi() {
                       left: "50%",
                       bgcolor: "background.paper",
                       transform: "translate(-50%, -50%)",
-                      width: 1500,
-                      height: 700,
+                      width: 1200,
+                      height: 600,
                       boxShadow: 24,
                       p: 4,
                       minHeight: 200,
