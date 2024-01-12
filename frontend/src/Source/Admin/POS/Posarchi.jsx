@@ -17,16 +17,14 @@ import { AppBar, Drawer, mdTheme } from "../Structure";
 import Button from "@mui/material/Button";
 import Itemcard from "./Itemcard";
 import ShoppingCart from "./ShoppingCart";
-import TextField from "@mui/material/TextField";
 import Jailer from "./Jailer";
 import PropTypes from "prop-types";
 import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@mui/material/styles";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-
+import Registerd from "./Registerd";
 import Prisoner from "./Prisoner";
-import { green } from "@mui/material/colors";
 const steps = [
   "Select campaign settings",
   "Create an ad group",
@@ -76,8 +74,6 @@ export default function Posarchi() {
   const handleCloseModal = () => {
     setModalOpen(false);
   };
-  const [setFormType] = useState("prisoner"); // Default to "prisoner" form
-
 
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -109,9 +105,6 @@ export default function Posarchi() {
     };
   }
 
-
- 
-
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
@@ -122,8 +115,6 @@ export default function Posarchi() {
   const handleChangeIndex = (index) => {
     setValue(index);
   };
-
-
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -289,7 +280,7 @@ export default function Posarchi() {
                       >
                         <Tab label="Prisoners" {...a11yProps(0)} />
                         <Tab label="Jailer Registration" {...a11yProps(1)} />
-                        <Tab label="Registerd Jailer" {...a11yProps(2)} />
+                        <Tab label="Registerd Jailer" {...a11yProps(2)} />{" "}
                       </Tabs>
                     </AppBar>
                     <SwipeableViews
@@ -298,78 +289,30 @@ export default function Posarchi() {
                       onChangeIndex={handleChangeIndex}
                     >
                       <TabPanel value={value} index={0} dir={theme.direction}>
-                        <Prisoner />{" "}
-                        <Button
-                          variant="contained"
-                          style={{
-                            width: "500px",
-                            height: "50px",
-                            borderRadius: "10px",
-                          }}
-                          onClick={handleCloseModal}
-                        >
-                          Finish
-                        </Button>
+                        <Prisoner />
                       </TabPanel>
                       <TabPanel value={value} index={1} dir={theme.direction}>
                         <Jailer />
-                        <Button
-                          variant="contained"
-                          style={{
-                            width: "500px",
-                            height: "50px",
-                            borderRadius: "10px",
-                            marginTop: 800,
-                          }}
-                          onClick={handleCloseModal}
-                        >
-                          Finish
-                        </Button>
                       </TabPanel>
                       <TabPanel value={value} index={2} dir={theme.direction}>
-                        <TextField
-                          label="Empolyee ID"
-                          id="outlined-start-adornment"
-                          sx={{ m: 1, width: "50ch" }}
-                        />
-                        <Button
-                          variant="contained"
-                          style={{
-                            marginRight: "10px",
-                            width: "150px",
-                            height: "60px",
-                            borderRadius: "10px",
-                          }}
-                        >
-                          Verfy
-                        </Button>
-                        <br />
-                        <TextField
-                          disabled
-                          id="filled-disabled"
-                          label="Disabled"
-                          defaultValue="Empolyee Name"
-                          variant="filled"
-                          sx={{ m: 1, width: "50ch" }}
-                        />
-                        <TextField
-                          disabled
-                          id="filled-disabled"
-                          label="Disabled"
-                          defaultValue="Empolyee ID Number"
-                          variant="filled"
-                          sx={{ m: 1, width: "50ch" }}
-                        />
-                        <TextField
-                          disabled
-                          id="filled-disabled"
-                          label="Disabled"
-                          defaultValue="Empolyee Contact Number"
-                          variant="filled"
-                          sx={{ m: 1, width: "50ch" }}
-                        />
+                        <Registerd />
                       </TabPanel>
                     </SwipeableViews>
+                    {/* Print & Complete Order button */}
+                    <Button
+                      variant="contained"
+                      style={{
+                        position: "fixed",
+                        bottom: "10px",
+                        right: "10px",
+                        width: "500px",
+                        height: "50px",
+                        borderRadius: "10px",
+                      }}
+                      onClick={handleCloseModal}
+                    >
+                      Print & Complete Order
+                    </Button>
                   </Box>
                 </Modal>
               </Item>
