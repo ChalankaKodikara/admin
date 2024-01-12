@@ -25,11 +25,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Registerd from "./Registerd";
 import Prisoner from "./Prisoner";
-const steps = [
-  "Select campaign settings",
-  "Create an ad group",
-  "Create an ad",
-];
+
 
 function Item(props) {
   return (
@@ -188,8 +184,8 @@ export default function Posarchi() {
                         variant="contained"
                         style={{
                           marginRight: "10px",
-                          width: "320px",
-                          height: "100px",
+                          width: "200px",
+                          height: "50px",
                           borderRadius: "10px",
                         }}
                       >
@@ -199,8 +195,8 @@ export default function Posarchi() {
                         variant="contained"
                         style={{
                           marginRight: "10px",
-                          width: "320px",
-                          height: "100px",
+                          width: "200px",
+                          height: "50px",
                           borderRadius: "10px",
                         }}
                       >
@@ -209,8 +205,8 @@ export default function Posarchi() {
                       <Button
                         variant="contained"
                         style={{
-                          width: "320px",
-                          height: "100px",
+                          width: "200px",
+                          height: "50px",
                           borderRadius: "10px",
                         }}
                       >

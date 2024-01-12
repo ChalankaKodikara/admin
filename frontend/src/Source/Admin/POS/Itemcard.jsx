@@ -32,7 +32,7 @@ export default function Itemcard({ addToCart, removeFromCart, cart }) {
     };
     fetchData();
   }, []);
-  
+
   const handleOpenModal = (product) => {
     setSelectedProduct(product);
     setModalOpen(true);
@@ -51,26 +51,24 @@ export default function Itemcard({ addToCart, removeFromCart, cart }) {
       {productData.map((product) => (
         <Card
           key={product.id}
-          sx={{ maxWidth: 500, margin: 5 }}
+          sx={{ maxWidth: 500, margin: 2 }}
           onClick={() => handleOpenModal(product)}
         >
-          <CardActionArea style={{ width: 200, height: 300 }}>
+          <CardActionArea style={{ width: 200, height: 200 }}>
             <CardMedia
               component="img"
               alt={product.name}
-              height="140"
+              height="120"
               src={`data:image/jpeg;base64,${product.image}`}
             />
             <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
+              <Typography gutterBottom variant="h7" component="div">
                 {product.name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 Price: {product.price}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {product.description}
-              </Typography>
+             
             </CardContent>
           </CardActionArea>
         </Card>
