@@ -5,16 +5,18 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-export default function ShoppingCart({ cart, handleOpenModal, removeFromCart }) {
+export default function ShoppingCart({
+  cart,
+  removeFromCart,
+}) {
   return (
-    <div style={{ marginTop: "20px" }}>
+    <div>
       {cart.map((product) => (
         <div key={product.id}>
           <Card
             sx={{
               display: "flex",
               maxWidth: 500,
-              margin: 5,
             }}
           >
             <CardMedia
@@ -27,12 +29,14 @@ export default function ShoppingCart({ cart, handleOpenModal, removeFromCart }) 
                 flexShrink: 0,
               }}
             />
-            <CardContent sx={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}>
+            <CardContent
+              sx={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+              }}
+            >
               <div>
                 <Typography gutterBottom variant="h6" component="div">
                   {product.name}

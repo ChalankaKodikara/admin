@@ -32,6 +32,7 @@ export default function Itemcard({ addToCart, removeFromCart, cart }) {
     };
     fetchData();
   }, []);
+  
   const handleOpenModal = (product) => {
     setSelectedProduct(product);
     setModalOpen(true);

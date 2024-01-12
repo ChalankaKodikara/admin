@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
@@ -9,6 +9,7 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import { Modal } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems } from "../listitems";
@@ -16,6 +17,7 @@ import { AppBar, Drawer, mdTheme } from "../Structure";
 import Button from "@mui/material/Button";
 import Itemcard from "./Itemcard";
 import ShoppingCart from "./ShoppingCart";
+import TextField from "@mui/material/TextField";
 
 function Item(props) {
   return (
@@ -28,14 +30,19 @@ function Item(props) {
 export default function Posarchi() {
   const [open, setOpen] = React.useState(true);
   const [cart, setCart] = React.useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
   console.log("Cart contents:", cart);
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
   const addToCart = (product) => {
     setCart([...cart, product]);
   };
+
   const removeFromCart = (productId) => {
     const updatedCart = cart.filter((item) => item.id !== productId);
     setCart(updatedCart);
@@ -47,6 +54,20 @@ export default function Posarchi() {
       (total, product) => total + parseFloat(product.price),
       0
     );
+  };
+
+  const handleOpenModal = (product) => {
+    setSelectedProduct(product);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+  const [formType, setFormType] = useState("prisoner"); // Default to "prisoner" form
+
+  const handleFormTypeChange = (type) => {
+    setFormType(type);
   };
 
   return (
@@ -156,6 +177,7 @@ export default function Posarchi() {
                         addToCart={addToCart}
                         removeFromCart={removeFromCart}
                         cart={cart}
+                        handleOpenModal={handleOpenModal}
                       />
                     </div>
                   </div>
@@ -182,9 +204,124 @@ export default function Posarchi() {
                     height: "50px",
                     borderRadius: "10px",
                   }}
+                  onClick={() => setModalOpen(true)}
                 >
                   Check Out
                 </Button>
+                <Modal open={modalOpen} onClose={handleCloseModal}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 1500,
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+            }}
+          >
+            <Button
+              variant="contained"
+              style={{
+                marginRight: "10px",
+                width: "200px",
+                height: "50px",
+                borderRadius: "10px",
+              }}
+              onClick={() => handleFormTypeChange("prisoner")}
+            >
+              Prisoners
+            </Button>
+            <Button
+              variant="contained"
+              style={{
+                marginRight: "10px",
+                width: "200px",
+                height: "50px",
+                borderRadius: "10px",
+              }}
+              onClick={() => handleFormTypeChange("jailer")}
+            >
+              Jailer
+            </Button>
+            <br />
+            {formType === "prisoner" && (
+              <>
+                {/* Prisoners Form */}
+                <TextField
+                  label="Prisoners Name"
+                  id="outlined-start-adornment"
+                  sx={{ m: 1, width: "50ch" }}
+                />
+                <TextField
+                  label="Phone Number"
+                  id="outlined-start-adornment"
+                  sx={{ m: 1, width: "50ch" }}
+                />
+                <Button
+                  variant="contained"
+                  style={{
+                    marginRight: "10px",
+                    width: "200px",
+                    height: "70px",
+                    borderRadius: "10px",
+                  }}
+                >
+                  Send OTP
+                </Button>
+                <br />
+                <TextField
+                  label="Ward Number"
+                  id="outlined-start-adornment"
+                  sx={{ m: 1, width: "50ch" }}
+                />
+                <TextField
+                  label="Prisoner Number"
+                  id="outlined-start-adornment"
+                  sx={{ m: 1, width: "50ch" }}
+                />
+              </>
+            )}
+            {formType === "jailer" && (
+              <>
+                {/* Jailer Form */}
+                <TextField
+                  label="Jailer's Name"
+                  id="outlined-start-adornment"
+                  sx={{ m: 1, width: "50ch" }}
+                />
+                <TextField
+                  label="Jailer's Phone Number"
+                  id="outlined-start-adornment"
+                  sx={{ m: 1, width: "50ch" }}
+                />
+                <Button
+                  variant="contained"
+                  style={{
+                    marginRight: "10px",
+                    width: "200px",
+                    height: "70px",
+                    borderRadius: "10px",
+                  }}
+                >
+                  Send OTP
+                </Button>
+                <br />
+                <TextField
+                  label="Jailer's Badge Number"
+                  id="outlined-start-adornment"
+                  sx={{ m: 1, width: "50ch" }}
+                />
+                <TextField
+                  label="Jailer's ID"
+                  id="outlined-start-adornment"
+                  sx={{ m: 1, width: "50ch" }}
+                />
+              </>
+            )}
+          </Box>
+        </Modal>
               </Item>
             </Grid>
           </Grid>
