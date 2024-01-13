@@ -15,7 +15,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems } from "../listitems";
 import { AppBar, Drawer, mdTheme } from "../Structure";
 import Button from "@mui/material/Button";
-import Itemcard from "./Itemcard";
+import Dinner from "./Dinner";
 import ShoppingCart from "./ShoppingCart";
 import Jailer from "./Jailer";
 import PropTypes from "prop-types";
@@ -25,7 +25,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Registerd from "./Registerd";
 import Prisoner from "./Prisoner";
-
+import Lunch from "./Lunch";
 
 function Item(props) {
   return (
@@ -63,7 +63,7 @@ export default function Posarchi() {
     );
   };
 
-  const handleOpenModal = (product) => {
+  const handleOpenModal = () => {
     setModalOpen(true);
   };
 
@@ -110,6 +110,20 @@ export default function Posarchi() {
 
   const handleChangeIndex = (index) => {
     setValue(index);
+  };
+
+  const [selectedMeal, setSelectedMeal] = useState(null);
+
+  const handleOpenLunch = () => {
+    setSelectedMeal("lunch");
+  };
+
+  const handleOpenDinner = () => {
+    setSelectedMeal("dinner");
+  };
+
+  const handleCloseMeal = () => {
+    setSelectedMeal(null);
   };
 
   return (
@@ -199,6 +213,7 @@ export default function Posarchi() {
                           height: "50px",
                           borderRadius: "10px",
                         }}
+                        onClick={handleOpenLunch}
                       >
                         Lunch
                       </Button>
@@ -209,18 +224,25 @@ export default function Posarchi() {
                           height: "50px",
                           borderRadius: "10px",
                         }}
+                        onClick={handleOpenDinner}
                       >
                         Dinner
                       </Button>
                     </div>
                     <br />
                     <div className="items">
-                      <Itemcard
-                        addToCart={addToCart}
-                        removeFromCart={removeFromCart}
-                        cart={cart}
-                        handleOpenModal={handleOpenModal}
-                      />
+                      {selectedMeal === "lunch" && (
+                        <Lunch
+                          onClose={handleCloseMeal}
+                          addToCart={addToCart}
+                        />
+                      )}
+                      {selectedMeal === "dinner" && (
+                        <Dinner
+                          onClose={handleCloseMeal}
+                          addToCart={addToCart}
+                        />
+                      )}
                     </div>
                   </div>
                   <br />

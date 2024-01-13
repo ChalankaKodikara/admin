@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import { CardActionArea, Modal, Box, Button } from "@mui/material";
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Modal,
+  Box,
+  Typography,
+  Button,
+} from "@mui/material";
 import axios from "axios";
-export default function Itemcard({ addToCart, removeFromCart, cart }) {
+
+export default function Itemcard({ addToCart }) {
   const [productData, setProductData] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,42 +44,46 @@ export default function Itemcard({ addToCart, removeFromCart, cart }) {
     setSelectedProduct(product);
     setModalOpen(true);
   };
+
   const handleCloseModal = () => {
     setModalOpen(false);
   };
+
   const handleAddToCart = () => {
     if (selectedProduct) {
       addToCart(selectedProduct);
       handleCloseModal();
     }
   };
+
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
-      {productData.map((product) => (
-        <Card
-          key={product.id}
-          sx={{ maxWidth: 500, margin: 2 }}
-          onClick={() => handleOpenModal(product)}
-        >
-          <CardActionArea style={{ width: 200, height: 200 }}>
-            <CardMedia
-              component="img"
-              alt={product.name}
-              height="120"
-              src={`data:image/jpeg;base64,${product.image}`}
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h7" component="div">
-                {product.name}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Price: {product.price}
-              </Typography>
-             
-            </CardContent>
-          </CardActionArea>
-        </Card>
-      ))}
+      {productData
+        .filter((product) => product.promotionStatus !== "promoted") // Filter not promoted items
+        .map((product) => (
+          <Card
+            key={product.id}
+            sx={{ maxWidth: 500, margin: 2 }}
+            onClick={() => handleOpenModal(product)}
+          >
+            <CardActionArea style={{ width: 200, height: 200 }}>
+              <CardMedia
+                component="img"
+                alt={product.name}
+                height="120"
+                src={`data:image/jpeg;base64,${product.image}`}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h7" component="div">
+                  {product.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Price: {product.price}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        ))}
       <Modal open={modalOpen} onClose={handleCloseModal}>
         <Box
           sx={{
