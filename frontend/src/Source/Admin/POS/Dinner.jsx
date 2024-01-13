@@ -7,14 +7,19 @@ import {
   Modal,
   Box,
   Typography,
+  AppBar,
+  Tabs,
+  Tab,
   Button,
 } from "@mui/material";
 import axios from "axios";
+import SwipeableViews from 'react-swipeable-views';
 
 export default function Itemcard({ addToCart }) {
   const [productData, setProductData] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,10 +61,18 @@ export default function Itemcard({ addToCart }) {
     }
   };
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const handleChangeIndex = (index) => {
+    setValue(index);
+  };
+
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
       {productData
-        .filter((product) => product.promotionStatus !== "promoted") // Filter not promoted items
+        .filter((product) => product.promotionStatus !== "promoted")
         .map((product) => (
           <Card
             key={product.id}
@@ -90,22 +103,39 @@ export default function Itemcard({ addToCart }) {
             position: "absolute",
             top: "50%",
             left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
             bgcolor: "background.paper",
+            transform: "translate(-50%, -50%)",
+            width: 1200,
+            height: 600,
             boxShadow: 24,
             p: 4,
+            minHeight: 200,
           }}
         >
-          <Typography variant="h6">
-            {selectedProduct && selectedProduct.name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Price: {selectedProduct && selectedProduct.price}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {selectedProduct && selectedProduct.description}
-          </Typography>
+          <AppBar position="static" color="default">
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              indicatorColor="primary"
+              textColor="primary"
+              variant="fullWidth"
+              aria-label="action tabs example"
+            >
+              <Tab label="Staff" />
+              <Tab label="Prison" />
+            </Tabs>
+          </AppBar>
+          <SwipeableViews
+            index={value}
+            onChangeIndex={handleChangeIndex}
+          >
+            <div>
+              <h1>Staff</h1>
+            </div>
+            <div>
+              <h1>Prison</h1>
+            </div>
+          </SwipeableViews>
           <Button onClick={handleCloseModal}>Close</Button>
           <br />
           <Button
