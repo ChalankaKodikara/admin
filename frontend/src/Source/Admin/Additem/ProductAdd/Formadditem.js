@@ -7,8 +7,22 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
-// import LoadingSpinner from '../LoadingSpinner';
+import MenuItem from "@mui/material/MenuItem";
+
+const meals = [
+  {
+    value: "Breakfast",
+    label: "Breakfast",
+  },
+  {
+    value: "Lunch",
+    label: "Lunch",
+  },
+  {
+    value: "Dinner",
+    label: "Dinner",
+  },
+];
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -20,15 +34,15 @@ const useStyles = makeStyles(() => ({
     marginTop: "20px",
   },
   imageContainer: {
-    border: "1px solid grey", // Replace with your desired border style
-    borderRadius: "4px", // Replace with your desired border radius value or CSS property
-    padding: "5px", // Replace with your desired padding value or CSS property
+    border: "1px solid grey",
+    borderRadius: "4px",
+    padding: "5px",
     position: "relative",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: "200px", // Replace with your desired height value or CSS property
-    maxWidth: "200px", // Replace with your desired max width value or CSS property
+    height: "200px",
+    maxWidth: "200px",
   },
   formControl: {
     marginBottom: "20px",
@@ -48,15 +62,16 @@ export default function FormAddProduct() {
     name: "",
     price: "",
     description: "",
-    image: image, // Add a new property for the base64-encoded image
+    image: image,
     promotionStatus: promotionStatus,
+    meal: "", // Add a new property for meal
   });
 
   const handleFormChange = (event) => {
     const { name, value } = event.target;
 
     if (name === "promotionStatus") {
-      setPromotionStatus(value); // Update promotionStatus state
+      setPromotionStatus(value);
     }
 
     setFormData((prevFormData) => ({
@@ -72,11 +87,11 @@ export default function FormAddProduct() {
     const reader = new FileReader();
 
     reader.onload = () => {
-      const base64Image = reader.result.split(",")[1]; // Extract the base64-encoded image string
+      const base64Image = reader.result.split(",")[1];
       setImage(base64Image);
       setFormData((prevFormData) => ({
         ...prevFormData,
-        image: base64Image, // Update the form data with the base64-encoded image string
+        image: base64Image,
       }));
     };
 
@@ -100,8 +115,10 @@ export default function FormAddProduct() {
       ...formData,
       promotionStatus: promotionStatus,
     };
+    setIsLoading(false);
+    navigate("/products");
 
-    fetch("https://backfood.tfdatamaster.com/api/v1/additem", {
+    fetch("https://backprison.talentfort.live/api/v1/additem", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -122,7 +139,6 @@ export default function FormAddProduct() {
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* {isLoading && <LoadingSpinner />} */}
       {hasErrors && (
         <Alert severity="error">
           <AlertTitle>Error</AlertTitle>
@@ -169,27 +185,25 @@ export default function FormAddProduct() {
             onChange={handleFormChange}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
-          <RadioGroup
-            aria-label="promotionStatus"
-            name="promotionStatus"
-            value={promotionStatus}
-            onChange={(e) => setPromotionStatus(e.target.value)}
-            row
-          >
-            <FormControlLabel
-              value="notPromoted"
-              control={<Radio />}
-              label="Not Promoted"
-            />
-            <FormControlLabel
-              value="promoted"
-              control={<Radio />}
-              label="Promoted"
-            />
-          </RadioGroup>
-        </Grid>
 
+        <Grid item xs={12} md={6}>
+          <TextField
+            id="outlined-select-meal"
+            select
+            label="Select Meal"
+            name="meal"
+            value={formData.meal}
+            onChange={handleFormChange}
+            variant="outlined"
+            fullWidth
+          >
+            {meals.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
         <Grid item xs={12} md={12}>
           <Box
             sx={{

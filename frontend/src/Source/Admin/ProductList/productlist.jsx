@@ -57,7 +57,7 @@ export default function ProductList() {
     const fetchSalesData = async () => {
       try {
         const response = await axios.get(
-          "https://backfood.tfdatamaster.com/api/v1/data/items"
+          "https://backprison.talentfort.live/api/v1/data/items"
         );
         console.log("API Response:", response.data);
 
@@ -67,7 +67,7 @@ export default function ProductList() {
           name: sale.name,
           price: sale.price,
           description: sale.description,
-          promotionStatus: sale.promotionStatus,
+          category: sale.promotionStatus,
           image: sale.image,
         }));
 
@@ -123,8 +123,8 @@ export default function ProductList() {
     },
     { field: "description", headerName: "Description", width: 300 },
     {
-      field: "promotionStatus",
-      headerName: "Promotion Status",
+      field: "Category",
+      headerName: "Category",
       width: 150,
       renderCell: (params) => (
         <div className="promotionStatusCell">
