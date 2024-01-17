@@ -1,15 +1,14 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
-import { Button, TextField, Grid, Typography } from "@mui/material";
+import { Button, TextField, Grid, Typography, MenuItem } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import MenuItem from "@mui/material/MenuItem";
 
-const meals = [
+const categorys = [
   {
     value: "Breakfast",
     label: "Breakfast",
@@ -44,14 +43,9 @@ const useStyles = makeStyles(() => ({
     height: "200px",
     maxWidth: "200px",
   },
-  formControl: {
-    marginBottom: "20px",
-    minWidth: 120,
-  },
 }));
 
 export default function FormAddProduct() {
-  const [promotionStatus, setPromotionStatus] = React.useState("notPromoted");
   const classes = useStyles();
   const navigate = useNavigate();
   const location = useLocation();
@@ -63,22 +57,15 @@ export default function FormAddProduct() {
     price: "",
     description: "",
     image: image,
-    promotionStatus: promotionStatus,
-    meal: "", // Add a new property for meal
+    category: "", // Add the category field back
   });
 
   const handleFormChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === "promotionStatus") {
-      setPromotionStatus(value);
-    }
-
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
-      promotionStatus:
-        name === "promotionStatus" ? value : prevFormData.promotionStatus,
     }));
   };
 
@@ -108,22 +95,16 @@ export default function FormAddProduct() {
 
     if (hasEmptyFields) {
       setHasErrors(true);
+      setIsLoading(false);
       return;
     }
-
-    const updatedFormData = {
-      ...formData,
-      promotionStatus: promotionStatus,
-    };
-    setIsLoading(false);
-    navigate("/products");
 
     fetch("https://backprison.talentfort.live/api/v1/additem", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(updatedFormData),
+      body: JSON.stringify(formData),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -185,19 +166,18 @@ export default function FormAddProduct() {
             onChange={handleFormChange}
           />
         </Grid>
-
         <Grid item xs={12} md={6}>
           <TextField
-            id="outlined-select-meal"
+            id="outlined-select-category"
             select
-            label="Select Meal"
-            name="meal"
-            value={formData.meal}
+            label="Select category"
+            name="category"
+            value={formData.category}
             onChange={handleFormChange}
             variant="outlined"
             fullWidth
           >
-            {meals.map((option) => (
+            {categorys.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>
@@ -249,7 +229,7 @@ export default function FormAddProduct() {
           </div>
         </Grid>
         <Grid item xs={12} className={classes.buttonContainer}>
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
+          <Button type="submit" variant="contained" color="primary">
             Save Changes
           </Button>
         </Grid>
