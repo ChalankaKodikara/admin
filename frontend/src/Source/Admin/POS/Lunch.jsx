@@ -25,7 +25,7 @@ export default function Itemcard({ addToCart, removeFromCart, cart }) {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://backfood.tfdatamaster.com/api/v1/data/items"
+          "https://backprison.talentfort.live/api/v1/data/items"
         );
         console.log("API Response:", response.data);
         const formattedProductData = response.data.map((product) => ({
@@ -33,7 +33,7 @@ export default function Itemcard({ addToCart, removeFromCart, cart }) {
           name: product.name,
           price: product.price,
           description: product.description,
-          promotionStatus: product.promotionStatus,
+          category: product.category,
           image: product.image,
         }));
         console.log("Product Data:", formattedProductData);
@@ -89,7 +89,7 @@ export default function Itemcard({ addToCart, removeFromCart, cart }) {
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
       {productData
-        .filter((product) => product.promotionStatus === "promoted")
+        .filter((product) => product.category === "Lunch")
         .map((product) => (
           <Card
             key={product.id}

@@ -1,15 +1,13 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { Button, TextField, Grid, Typography } from "@mui/material";
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import MenuItem from "@mui/material/MenuItem";
 
-const meals = [
+const categoryOptions = [
   {
     value: "Breakfast",
     label: "Breakfast",
@@ -44,41 +42,27 @@ const useStyles = makeStyles(() => ({
     height: "200px",
     maxWidth: "200px",
   },
-  formControl: {
-    marginBottom: "20px",
-    minWidth: 120,
-  },
 }));
 
 export default function FormAddProduct() {
-  const [promotionStatus, setPromotionStatus] = React.useState("notPromoted");
   const classes = useStyles();
   const navigate = useNavigate();
-  const location = useLocation();
   const [image, setImage] = useState("");
   const [hasErrors, setHasErrors] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = React.useState({
+  const [formData, setFormData] = useState({
     name: "",
     price: "",
     description: "",
-    image: image,
-    promotionStatus: promotionStatus,
-    meal: "", // Add a new property for meal
+    image: "",
+    category: "", // Change "meal" to "category"
   });
 
   const handleFormChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === "promotionStatus") {
-      setPromotionStatus(value);
-    }
-
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
-      promotionStatus:
-        name === "promotionStatus" ? value : prevFormData.promotionStatus,
     }));
   };
 
@@ -98,8 +82,7 @@ export default function FormAddProduct() {
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = (event) => {
-    setIsLoading(true);
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const hasEmptyFields = Object.values(formData).some(
@@ -111,30 +94,27 @@ export default function FormAddProduct() {
       return;
     }
 
-    const updatedFormData = {
-      ...formData,
-      promotionStatus: promotionStatus,
-    };
-    setIsLoading(false);
-    navigate("/products");
+    setHasErrors(false);
 
-    fetch("https://backprison.talentfort.live/api/v1/additem", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedFormData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setIsLoading(false);
-        navigate("/products");
-      })
-      .catch((error) => {
-        console.error(error);
-        setIsLoading(false);
-      });
+    try {
+      const response = await fetch(
+        "https://backprison.talentfort.live/api/v1/additem",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+      console.log(data);
+
+      navigate("/products");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -185,19 +165,18 @@ export default function FormAddProduct() {
             onChange={handleFormChange}
           />
         </Grid>
-
         <Grid item xs={12} md={6}>
           <TextField
-            id="outlined-select-meal"
+            id="outlined-select-category"
             select
-            label="Select Meal"
-            name="meal"
-            value={formData.meal}
+            label="Select Category"
+            name="category"
+            value={formData.category}
             onChange={handleFormChange}
             variant="outlined"
             fullWidth
           >
-            {meals.map((option) => (
+            {categoryOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>
@@ -249,7 +228,7 @@ export default function FormAddProduct() {
           </div>
         </Grid>
         <Grid item xs={12} className={classes.buttonContainer}>
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
+          <Button variant="contained" color="primary" type="submit">
             Save Changes
           </Button>
         </Grid>

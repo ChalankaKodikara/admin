@@ -12,10 +12,10 @@ import {
   Tab,
   Button,
 } from "@mui/material";
+import SwipeableViews from "react-swipeable-views";
 import axios from "axios";
-import SwipeableViews from 'react-swipeable-views';
 
-export default function Itemcard({ addToCart }) {
+export default function Itemcard({ addToCart, removeFromCart, cart }) {
   const [productData, setProductData] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -25,7 +25,7 @@ export default function Itemcard({ addToCart }) {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://backfood.tfdatamaster.com/api/v1/data/items"
+          "https://backprison.talentfort.live/api/v1/data/items"
         );
         console.log("API Response:", response.data);
         const formattedProductData = response.data.map((product) => ({
@@ -33,7 +33,7 @@ export default function Itemcard({ addToCart }) {
           name: product.name,
           price: product.price,
           description: product.description,
-          promotionStatus: product.promotionStatus,
+          category: product.category,
           image: product.image,
         }));
         console.log("Product Data:", formattedProductData);
@@ -69,10 +69,27 @@ export default function Itemcard({ addToCart }) {
     setValue(index);
   };
 
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+      <Typography
+        component="div"
+        role="tabpanel"
+        hidden={value !== index}
+        id={`action-tabpanel-${index}`}
+        aria-labelledby={`action-tab-${index}`}
+        {...other}
+      >
+        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      </Typography>
+    );
+  }
+
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
       {productData
-        .filter((product) => product.promotionStatus !== "promoted")
+        .filter((product) => product.category === "Dinner")
         .map((product) => (
           <Card
             key={product.id}
@@ -121,20 +138,21 @@ export default function Itemcard({ addToCart }) {
               variant="fullWidth"
               aria-label="action tabs example"
             >
-              <Tab label="Staff" />
-              <Tab label="Prison" />
+              <Tab label="staff" />
+              <Tab label="Prison " />
             </Tabs>
           </AppBar>
           <SwipeableViews
+            axis="x"
             index={value}
             onChangeIndex={handleChangeIndex}
           >
-            <div>
-              <h1>Staff</h1>
-            </div>
-            <div>
-              <h1>Prison</h1>
-            </div>
+            <TabPanel value={value} index={0} dir="ltr">
+              <h1> staff</h1>{" "}
+            </TabPanel>
+            <TabPanel value={value} index={1} dir="ltr">
+              <h1> Prison</h1>{" "}
+            </TabPanel>
           </SwipeableViews>
           <Button onClick={handleCloseModal}>Close</Button>
           <br />
