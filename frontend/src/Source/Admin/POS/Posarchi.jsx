@@ -328,7 +328,6 @@ export default function Posarchi() {
                         <Registerd />
                       </TabPanel>
                     </SwipeableViews>
-                    {/* Print & Complete Order button */}
                     <Button
                       variant="contained"
                       style={{
