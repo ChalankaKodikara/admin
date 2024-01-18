@@ -16,6 +16,8 @@ import { mainListItems } from "../listitems";
 import { AppBar, Drawer, mdTheme } from "../Structure";
 import Button from "@mui/material/Button";
 import Dinner from "./Dinner";
+import Breakfast from "./Breakfast";
+
 import ShoppingCart from "./ShoppingCart";
 import Jailer from "./Jailer";
 import PropTypes from "prop-types";
@@ -121,7 +123,9 @@ export default function Posarchi() {
   const handleOpenDinner = () => {
     setSelectedMeal("dinner");
   };
-
+  const handleOpenBreakfast = () => {
+    setSelectedMeal("Breakfast");
+  };
   const handleCloseMeal = () => {
     setSelectedMeal(null);
   };
@@ -202,6 +206,8 @@ export default function Posarchi() {
                           height: "50px",
                           borderRadius: "10px",
                         }}
+                        onClick={handleOpenBreakfast}  
+
                       >
                         Breakfast
                       </Button>
@@ -231,6 +237,12 @@ export default function Posarchi() {
                     </div>
                     <br />
                     <div className="items">
+                    {selectedMeal === "Breakfast" && (
+                        <Breakfast
+                          onClose={handleCloseMeal}
+                          addToCart={addToCart}
+                        />
+                      )}
                       {selectedMeal === "lunch" && (
                         <Lunch
                           onClose={handleCloseMeal}
