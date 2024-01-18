@@ -25,7 +25,7 @@ export default function Itemcard({ addToCart, removeFromCart, cart }) {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://backprison.talentfort.live/api/v1/data/items"
+          "https://backprison.talentfort.live/api/v1/data/itemscategoryvice?category=Breakfast"
         );
         console.log("API Response:", response.data);
         const formattedProductData = response.data.map((product) => ({
