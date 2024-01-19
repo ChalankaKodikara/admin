@@ -15,7 +15,25 @@ import {
 import SwipeableViews from "react-swipeable-views";
 import axios from "axios";
 
-export default function Itemcard({ addToCart, removeFromCart, cart }) {
+// Define TabPanel component outside of Itemcard component
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`action-tabpanel-${index}`}
+      aria-labelledby={`action-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </Typography>
+  );
+}
+
+export default function Itemcard({ addToCart }) {
   const [productData, setProductData] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -25,9 +43,8 @@ export default function Itemcard({ addToCart, removeFromCart, cart }) {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://backprison.talentfort.live/api/v1/data/items"
+          "https://backprison.talentfort.live/api/v1/data/itemscategoryvice?category=Dinner"
         );
-        console.log("API Response:", response.data);
         const formattedProductData = response.data.map((product) => ({
           id: product._id,
           name: product.name,
@@ -36,7 +53,6 @@ export default function Itemcard({ addToCart, removeFromCart, cart }) {
           category: product.category,
           image: product.image,
         }));
-        console.log("Product Data:", formattedProductData);
         setProductData(formattedProductData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -69,51 +85,32 @@ export default function Itemcard({ addToCart, removeFromCart, cart }) {
     setValue(index);
   };
 
-  function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-      <Typography
-        component="div"
-        role="tabpanel"
-        hidden={value !== index}
-        id={`action-tabpanel-${index}`}
-        aria-labelledby={`action-tab-${index}`}
-        {...other}
-      >
-        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-      </Typography>
-    );
-  }
-
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
-      {productData
-        .filter((product) => product.category === "Dinner")
-        .map((product) => (
-          <Card
-            key={product.id}
-            sx={{ maxWidth: 500, margin: 2 }}
-            onClick={() => handleOpenModal(product)}
-          >
-            <CardActionArea style={{ width: 200, height: 200 }}>
-              <CardMedia
-                component="img"
-                alt={product.name}
-                height="120"
-                src={`data:image/jpeg;base64,${product.image}`}
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h7" component="div">
-                  {product.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Price: {product.price}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        ))}
+      {productData.map((product) => (
+        <Card
+          key={product.id}
+          sx={{ maxWidth: 500, margin: 2 }}
+          onClick={() => handleOpenModal(product)}
+        >
+          <CardActionArea style={{ width: 200, height: 200 }}>
+            <CardMedia
+              component="img"
+              alt={product.name}
+              height="120"
+              src={`data:image/jpeg;base64,${product.image}`}
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h7" component="div">
+                {product.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Price: {product.price}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      ))}
       <Modal open={modalOpen} onClose={handleCloseModal}>
         <Box
           sx={{
