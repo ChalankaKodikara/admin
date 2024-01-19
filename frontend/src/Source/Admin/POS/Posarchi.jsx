@@ -15,11 +15,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems } from "../listitems";
 import { AppBar, Drawer, mdTheme } from "../Structure";
 import Button from "@mui/material/Button";
-import Dinner from "./Dinner";
-import Breakfast from "./Breakfast";
-
 import ShoppingCart from "./ShoppingCart";
-import Jailer from "./Jailer";
 import PropTypes from "prop-types";
 import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@mui/material/styles";
@@ -28,7 +24,9 @@ import Tab from "@mui/material/Tab";
 import Registerd from "./Registerd";
 import Prisoner from "./Prisoner";
 import Lunch from "./Lunch";
-
+import Breakfast from "./Breakfast";
+import Dinner from "./Dinner";
+import Jailer from "./Jailer"; // Make sure to adjust the path if needed
 function Item(props) {
   return (
     <Paper sx={{ p: 2, textAlign: "center", color: "text.secondary" }}>
@@ -41,8 +39,7 @@ export default function Posarchi() {
   const [open, setOpen] = React.useState(true);
   const [cart, setCart] = React.useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-
-  console.log("Cart contents:", cart);
+  const [selectedMeal, setSelectedMeal] = useState(null);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -52,15 +49,17 @@ export default function Posarchi() {
     setCart([...cart, product]);
   };
 
-  const removeFromCart = (productId) => {
-    const updatedCart = cart.filter((item) => item.id !== productId);
-    setCart(updatedCart);
+  const removeFromCart = (index) => {
+    setCart((prevCart) => {
+      const updatedCart = [...prevCart];
+      updatedCart.splice(index, 1); 
+      return updatedCart;
+    });
   };
 
-  // Calculate total price of all items in the cart
   const calculateCartTotal = () => {
     return cart.reduce(
-      (total, product) => total + parseFloat(product.price),
+      (total, item) => total + parseFloat(item.product.price),
       0
     );
   };
@@ -114,8 +113,6 @@ export default function Posarchi() {
     setValue(index);
   };
 
-  const [selectedMeal, setSelectedMeal] = useState(null);
-
   const handleOpenLunch = () => {
     setSelectedMeal("lunch");
   };
@@ -123,9 +120,11 @@ export default function Posarchi() {
   const handleOpenDinner = () => {
     setSelectedMeal("dinner");
   };
+
   const handleOpenBreakfast = () => {
     setSelectedMeal("Breakfast");
   };
+
   const handleCloseMeal = () => {
     setSelectedMeal(null);
   };
@@ -206,8 +205,7 @@ export default function Posarchi() {
                           height: "50px",
                           borderRadius: "10px",
                         }}
-                        onClick={handleOpenBreakfast}  
-
+                        onClick={handleOpenBreakfast}
                       >
                         Breakfast
                       </Button>
@@ -237,23 +235,14 @@ export default function Posarchi() {
                     </div>
                     <br />
                     <div className="items">
-                    {selectedMeal === "Breakfast" && (
-                        <Breakfast
-                          onClose={handleCloseMeal}
-                          addToCart={addToCart}
-                        />
+                      {selectedMeal === "Breakfast" && (
+                        <Breakfast onClose={handleCloseMeal} addToCart={addToCart} />
                       )}
                       {selectedMeal === "lunch" && (
-                        <Lunch
-                          onClose={handleCloseMeal}
-                          addToCart={addToCart}
-                        />
+                        <Lunch onClose={handleCloseMeal} addToCart={addToCart} />
                       )}
                       {selectedMeal === "dinner" && (
-                        <Dinner
-                          onClose={handleCloseMeal}
-                          addToCart={addToCart}
-                        />
+                        <Dinner onClose={handleCloseMeal} addToCart={addToCart} />
                       )}
                     </div>
                   </div>
@@ -265,85 +254,83 @@ export default function Posarchi() {
             </Grid>
             <Grid item xs={3}>
               <Item>
-                <Box sx={{ display: "flex" }}>
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                   <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
-                </Box>
-                <Box sx={{ display: "flex" }}>
                   <Typography gutterBottom variant="h5" component="div">
                     Total: Rs. {calculateCartTotal().toFixed(2)}
                   </Typography>
-                </Box>
-                <Button
-                  variant="contained"
-                  style={{
-                    width: "200px",
-                    height: "50px",
-                    borderRadius: "10px",
-                  }}
-                  onClick={() => setModalOpen(true)}
-                >
-                  Check Out
-                </Button>
-                <Modal open={modalOpen} onClose={handleCloseModal}>
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      bgcolor: "background.paper",
-                      transform: "translate(-50%, -50%)",
-                      width: 1200,
-                      height: 600,
-                      boxShadow: 24,
-                      p: 4,
-                      minHeight: 200,
+                  <Button
+                    variant="contained"
+                    style={{
+                      width: "200px",
+                      height: "50px",
+                      borderRadius: "10px",
                     }}
+                    onClick={handleOpenModal}
                   >
-                    <AppBar position="static" color="default">
-                      <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        variant="fullWidth"
-                        aria-label="action tabs example"
-                      >
-                        <Tab label="Prisoners" {...a11yProps(0)} />
-                        <Tab label="Jailer Registration" {...a11yProps(1)} />
-                        <Tab label="Registerd Jailer" {...a11yProps(2)} />{" "}
-                      </Tabs>
-                    </AppBar>
-                    <SwipeableViews
-                      axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-                      index={value}
-                      onChangeIndex={handleChangeIndex}
-                    >
-                      <TabPanel value={value} index={0} dir={theme.direction}>
-                        <Prisoner />
-                      </TabPanel>
-                      <TabPanel value={value} index={1} dir={theme.direction}>
-                        <Jailer />
-                      </TabPanel>
-                      <TabPanel value={value} index={2} dir={theme.direction}>
-                        <Registerd />
-                      </TabPanel>
-                    </SwipeableViews>
-                    <Button
-                      variant="contained"
-                      style={{
-                        position: "fixed",
-                        bottom: "10px",
-                        right: "10px",
-                        width: "500px",
-                        height: "50px",
-                        borderRadius: "10px",
+                    Check Out
+                  </Button>
+                  <Modal open={modalOpen} onClose={handleCloseModal}>
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        bgcolor: "background.paper",
+                        transform: "translate(-50%, -50%)",
+                        width: 1200,
+                        height: 600,
+                        boxShadow: 24,
+                        p: 4,
+                        minHeight: 200,
                       }}
-                      onClick={handleCloseModal}
                     >
-                      Print & Complete Order
-                    </Button>
-                  </Box>
-                </Modal>
+                      <AppBar position="static" color="default">
+                        <Tabs
+                          value={value}
+                          onChange={handleChange}
+                          indicatorColor="primary"
+                          textColor="primary"
+                          variant="fullWidth"
+                          aria-label="action tabs example"
+                        >
+                          <Tab label="Prisoners" {...a11yProps(0)} />
+                          <Tab label="Jailer Registration" {...a11yProps(1)} />
+                          <Tab label="Registered Jailer" {...a11yProps(2)} />
+                        </Tabs>
+                      </AppBar>
+                      <SwipeableViews
+                        axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+                        index={value}
+                        onChangeIndex={handleChangeIndex}
+                      >
+                        <TabPanel value={value} index={0} dir={theme.direction}>
+                          <Prisoner />
+                        </TabPanel>
+                        <TabPanel value={value} index={1} dir={theme.direction}>
+                          <Jailer />
+                        </TabPanel>
+                        <TabPanel value={value} index={2} dir={theme.direction}>
+                          <Registerd />
+                        </TabPanel>
+                      </SwipeableViews>
+                      <Button
+                        variant="contained"
+                        style={{
+                          position: "fixed",
+                          bottom: "10px",
+                          right: "10px",
+                          width: "500px",
+                          height: "50px",
+                          borderRadius: "10px",
+                        }}
+                        onClick={handleCloseModal}
+                      >
+                        Print & Complete Order
+                      </Button>
+                    </Box>
+                  </Modal>
+                </Box>
               </Item>
             </Grid>
           </Grid>
