@@ -1,3 +1,4 @@
+// ShoppingCart.jsx
 import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -11,8 +12,8 @@ export default function ShoppingCart({
 }) {
   return (
     <div>
-      {cart.map((product) => (
-        <div key={product.id}>
+      {cart.map((item) => (
+        <div key={item.product.id}>
           <Card
             sx={{
               display: "flex",
@@ -21,9 +22,9 @@ export default function ShoppingCart({
           >
             <CardMedia
               component="img"
-              alt={product.name}
+              alt={item.product.name}
               height="100"
-              src={`data:image/jpeg;base64,${product.image}`}
+              src={`data:image/jpeg;base64,${item.product.image}`}
               sx={{
                 width: 100,
                 flexShrink: 0,
@@ -39,16 +40,19 @@ export default function ShoppingCart({
             >
               <div>
                 <Typography gutterBottom variant="h6" component="div">
-                  {product.name}
+                  {item.product.name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Price: {product.price}
+                  Price: {item.product.price}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Date: {item.date.toDateString()} {/* Adjust this line to display the date in the desired format */}
                 </Typography>
               </div>
               <Button
                 variant="contained"
                 color="error"
-                onClick={() => removeFromCart(product.id)}
+                onClick={() => removeFromCart(item.product.id)}
               >
                 Remove 
               </Button>

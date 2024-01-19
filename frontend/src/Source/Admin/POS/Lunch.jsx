@@ -1,3 +1,4 @@
+// ItemCard.jsx
 import React, { useEffect, useState } from "react";
 import {
   Card,
@@ -11,11 +12,13 @@ import {
   Tabs,
   Tab,
   Button,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import SwipeableViews from "react-swipeable-views";
 import axios from "axios";
 
-// Define TabPanel component outside of Itemcard component
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -33,11 +36,13 @@ function TabPanel(props) {
   );
 }
 
-export default function Itemcard({ addToCart }) {
+export default function ItemCard({ addToCart }) {
   const [productData, setProductData] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [value, setValue] = useState(0);
+  const [dateCheckboxes, setDateCheckboxes] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,8 +76,8 @@ export default function Itemcard({ addToCart }) {
   };
 
   const handleAddToCart = () => {
-    if (selectedProduct) {
-      addToCart(selectedProduct);
+    if (selectedProduct && selectedDate) {
+      addToCart({ product: selectedProduct, date: selectedDate });
       handleCloseModal();
     }
   };
@@ -84,6 +89,42 @@ export default function Itemcard({ addToCart }) {
   const handleChangeIndex = (index) => {
     setValue(index);
   };
+
+  const renderDateCheckboxes = () => {
+    const currentDate = new Date();
+    const checkboxes = [];
+    for (let i = 0; i < 3; i++) {
+      const checkboxDate = new Date();
+      checkboxDate.setDate(currentDate.getDate() + i);
+      const formattedDate = `${checkboxDate.getDate()} ${checkboxDate.toLocaleString(
+        "default",
+        {
+          month: "short",
+        }
+      )}`;
+      checkboxes.push(
+        <FormGroup key={i}>
+          <FormControlLabel
+            control={<Checkbox />}
+            label={`${formattedDate}`}
+            onClick={() => handleDateSelection(checkboxDate)}
+          />
+        </FormGroup>
+      );
+    }
+    setDateCheckboxes(checkboxes);
+  };
+
+  const handleDateSelection = (date) => {
+    setSelectedDate(date);
+  };
+
+  // Render date checkboxes when modal is opened
+  useEffect(() => {
+    if (modalOpen) {
+      renderDateCheckboxes();
+    }
+  }, [modalOpen]);
 
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
@@ -145,11 +186,11 @@ export default function Itemcard({ addToCart }) {
             onChangeIndex={handleChangeIndex}
           >
             <TabPanel value={value} index={0} dir="ltr">
-              <h1> staff</h1>{" "}
+              {dateCheckboxes.map((checkbox, index) => (
+                <div key={index}>{checkbox}</div>
+              ))}
             </TabPanel>
-            <TabPanel value={value} index={1} dir="ltr">
-              <h1> Prison</h1>{" "}
-            </TabPanel>
+            <TabPanel value={value} index={1} dir="ltr"></TabPanel>
           </SwipeableViews>
           <Button onClick={handleCloseModal}>Close</Button>
           <br />
