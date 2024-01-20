@@ -252,7 +252,7 @@ export default function Posarchi() {
                 </div>
               </Item>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={4}>
               <Item>
                 <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                   <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
