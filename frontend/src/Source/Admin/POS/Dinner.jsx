@@ -77,7 +77,18 @@ export default function ItemCard({ addToCart }) {
 
   const handleAddToCart = () => {
     if (selectedProduct && selectedDate) {
+      // Add to cart using the existing addToCart function
       addToCart({ product: selectedProduct, date: selectedDate });
+  
+      // Save the selected product ID and date in local storage
+      const { id } = selectedProduct; // Extract the product ID
+      const cartItem = { productId: id, date: selectedDate };
+  
+      // Save in local storage
+      const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+      const updatedCart = [...existingCart, cartItem];
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+  
       handleCloseModal();
     }
   };
