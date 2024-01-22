@@ -42,10 +42,18 @@ const HorizontalLinearStepper = () => {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-
+  
+    // Save input fields in local storage when moving to the next step
+    if (activeStep === 0) {
+      const { prisonersName, phoneNumber, wardNumber, prisonerNumber } = receiverDetails;
+      const inputData = { prisonersName, phoneNumber, wardNumber, prisonerNumber };
+      localStorage.setItem("inputData", JSON.stringify(inputData));
+    }
+  
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };
+  
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -142,10 +150,10 @@ const HorizontalLinearStepper = () => {
 
       // You can handle the response here if needed
       const responseData = await response.json();
-      console.log("Login Response:", responseData);
+      console.log("Mobile Number Verifiyed:", responseData);
 
       // Move to the next step or perform additional actions if login is successful
-      handleNext();
+      // handleNext();
     } catch (error) {
       console.error("Error logging in:", error.message);
     }
@@ -259,7 +267,7 @@ const HorizontalLinearStepper = () => {
               }}
               onClick={login}
             >
-              Login
+              Verify Number
             </Button>
           </div>
         );
@@ -285,7 +293,9 @@ const HorizontalLinearStepper = () => {
                     <StyledTableCell>{item.name}</StyledTableCell>
                     <StyledTableCell>{item.price}</StyledTableCell>
                     <StyledTableCell>{item.category}</StyledTableCell>
-                    <StyledTableCell>{item.date ? new Date(item.date).toDateString() : "N/A"}</StyledTableCell>
+                    <StyledTableCell>
+                      {item.date ? new Date(item.date).toDateString() : "N/A"}
+                    </StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
