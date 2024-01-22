@@ -6,14 +6,14 @@ import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/system';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { styled } from "@mui/system";
 
 const steps = ["Receiver Details", "Bill Print", "Order Complete!"];
 
@@ -25,9 +25,8 @@ const HorizontalLinearStepper = () => {
     phoneNumber: "",
     wardNumber: "",
     prisonerNumber: "",
+    otp: "",
   });
-  const [selectedProductDetails, setSelectedProductDetails] = React.useState(null);
-  const [selectedDate, setSelectedDate] = React.useState(null);
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -72,9 +71,84 @@ const HorizontalLinearStepper = () => {
       phoneNumber: "",
       wardNumber: "",
       prisonerNumber: "",
+      otp: "",
     });
-    setSelectedProductDetails(null);
-    setSelectedDate(null);
+  };
+
+  const sendOTP = async () => {
+    // Extract data from the form fields
+    const { prisonersName, phoneNumber, wardNumber, prisonerNumber } =
+      receiverDetails;
+
+    // Prepare the data to be sent
+    const data = {
+      name: prisonersName,
+      mobileno: phoneNumber,
+      presonerid: prisonerNumber,
+      wardno: wardNumber,
+    };
+
+    try {
+      // Make the HTTP POST request to your actual API endpoint for OTP
+      const response = await fetch(
+        "https://backprison.talentfort.live/api/v1/presonersignup/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // You can handle the response here if needed
+      const responseData = await response.json();
+      console.log("Response from the server:", responseData);
+    } catch (error) {
+      console.error("Error sending OTP:", error.message);
+    }
+  };
+
+  const login = async () => {
+    // Extract data from the form fields
+    const { phoneNumber, otp } = receiverDetails;
+
+    // Prepare the data to be sent for login
+    const loginData = {
+      mobileno: phoneNumber,
+      password: otp, // Assuming OTP is used as a password for simplicity
+    };
+
+    try {
+      // Make the HTTP POST request to the login endpoint
+      const response = await fetch(
+        "https://backprison.talentfort.live/api/v1/presonersignup/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(loginData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // You can handle the response here if needed
+      const responseData = await response.json();
+      console.log("Login Response:", responseData);
+
+      // Move to the next step or perform additional actions if login is successful
+      handleNext();
+    } catch (error) {
+      console.error("Error logging in:", error.message);
+    }
   };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -88,11 +162,11 @@ const HorizontalLinearStepper = () => {
   }));
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
+    "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
     },
     // hide last border
-    '&:last-child td, &:last-child th': {
+    "&:last-child td, &:last-child th": {
       border: 0,
     },
   }));
@@ -103,18 +177,28 @@ const HorizontalLinearStepper = () => {
         return (
           <div>
             <TextField
-              label="Prisoner's Name"
-              id="outlined-start-adornment"
-              value={receiverDetails.prisonersName}
-              onChange={(e) => setReceiverDetails((prev) => ({ ...prev, prisonersName: e.target.value }))}
+              label="Prisoners Name"
+              id="prisonername"
               sx={{ m: 1, width: "50ch" }}
+              value={receiverDetails.prisonersName}
+              onChange={(e) =>
+                setReceiverDetails((prev) => ({
+                  ...prev,
+                  prisonersName: e.target.value,
+                }))
+              }
             />
             <TextField
               label="Phone Number"
-              id="outlined-start-adornment"
+              id="mobileno"
+              sx={{ m: 1, width: "40ch" }}
               value={receiverDetails.phoneNumber}
-              onChange={(e) => setReceiverDetails((prev) => ({ ...prev, phoneNumber: e.target.value }))}
-              sx={{ m: 1, width: "50ch" }}
+              onChange={(e) =>
+                setReceiverDetails((prev) => ({
+                  ...prev,
+                  phoneNumber: e.target.value,
+                }))
+              }
             />
             <Button
               variant="contained"
@@ -125,9 +209,57 @@ const HorizontalLinearStepper = () => {
                 borderRadius: "10px",
                 marginTop: "10px",
               }}
-              onClick={handleNext}
+              onClick={sendOTP}
             >
               Send OTP
+            </Button>
+
+            <br />
+            <TextField
+              label="Ward Number"
+              id="wardno"
+              sx={{ m: 1, width: "50ch" }}
+              value={receiverDetails.wardNumber}
+              onChange={(e) =>
+                setReceiverDetails((prev) => ({
+                  ...prev,
+                  wardNumber: e.target.value,
+                }))
+              }
+            />
+            <TextField
+              label="Prisoner Number"
+              id="prisonerid"
+              sx={{ m: 1, width: "50ch" }}
+              value={receiverDetails.prisonerNumber}
+              onChange={(e) =>
+                setReceiverDetails((prev) => ({
+                  ...prev,
+                  prisonerNumber: e.target.value,
+                }))
+              }
+            />
+            <TextField
+              label="OTP "
+              id="password"
+              sx={{ m: 1, width: "50ch" }}
+              value={receiverDetails.otp}
+              onChange={(e) =>
+                setReceiverDetails((prev) => ({ ...prev, otp: e.target.value }))
+              }
+            />
+            <Button
+              variant="contained"
+              style={{
+                marginRight: "10px",
+                width: "150px",
+                height: "50px",
+                borderRadius: "10px",
+                marginTop: "10px",
+              }}
+              onClick={login}
+            >
+              Login
             </Button>
           </div>
         );
@@ -174,7 +306,9 @@ const HorizontalLinearStepper = () => {
           const stepProps = {};
           const labelProps = {};
           if (isStepOptional(index)) {
-            labelProps.optional = <Typography variant="caption">Optional</Typography>;
+            labelProps.optional = (
+              <Typography variant="caption">Optional</Typography>
+            );
           }
           if (isStepSkipped(index)) {
             stepProps.completed = false;
@@ -200,11 +334,7 @@ const HorizontalLinearStepper = () => {
           </Button>
           <Box sx={{ flex: "1 1 auto" }} />
           {isStepOptional(activeStep) && (
-            <Button
-              color="inherit"
-              onClick={handleSkip}
-              sx={{ mr: 1 }}
-            >
+            <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
               Skip
             </Button>
           )}
