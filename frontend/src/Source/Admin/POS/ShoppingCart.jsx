@@ -5,14 +5,14 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
 export default function ShoppingCart({ cart, removeFromCart }) {
-  const handleRemove = (index, productId) => {
+  const handleRemove = (index) => {
     // Remove from cart state
     removeFromCart(index);
 
     // Remove from local storage
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const updatedCart = existingCart.filter(item => item.productId !== productId);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    existingCart.splice(index, 1); // Remove the item at the specified index
+    localStorage.setItem("cart", JSON.stringify(existingCart));
   };
 
   return (
@@ -29,7 +29,7 @@ export default function ShoppingCart({ cart, removeFromCart }) {
             <Button
               variant="contained"
               color="error"
-              onClick={() => handleRemove(index, item.product.id)}
+              onClick={() => handleRemove(index)}
               sx={{
                 width: "100px",
                 height: "30px",

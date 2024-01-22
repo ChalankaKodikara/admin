@@ -51,7 +51,7 @@ export default function ItemCard({ addToCart }) {
           "https://backprison.talentfort.live/api/v1/data/itemscategoryvice?category=Breakfast"
         );
         const formattedProductData = response.data.map((product) => ({
-          id: product._id,
+          itemid: product.itemid,
           name: product.name,
           price: product.price,
           description: product.description,
@@ -76,25 +76,35 @@ export default function ItemCard({ addToCart }) {
   };
 
   const handleAddToCart = () => {
+    console.log("product data = ", productData);
+
+    console.log("selected Product = ", selectedProduct);
+
+    console.log("selected Date  = ", selectedDate);
+
     if (selectedProduct && selectedDate) {
       // Add to cart using the existing addToCart function
       addToCart({ product: selectedProduct, date: selectedDate });
-  
+
       // Save the selected product ID and date in local storage
-      const { id } = selectedProduct; // Extract the product ID
-      const cartItem = { productId: id, date: selectedDate };
-  
+      const { itemid, name, price, category } = selectedProduct; // Extract the product details
+      const cartItem = {
+        productId: itemid,
+        date: selectedDate,
+        name,
+        price,
+        category,
+      };
+
       // Save in local storage
       const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
       const updatedCart = [...existingCart, cartItem];
       localStorage.setItem("cart", JSON.stringify(updatedCart));
-  
+
       handleCloseModal();
     }
   };
-  
-  
-  
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
