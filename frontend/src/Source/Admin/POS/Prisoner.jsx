@@ -62,8 +62,18 @@ const HorizontalLinearStepper = () => {
       localStorage.setItem("inputData", JSON.stringify(inputData));
     }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
+    // Check if phone number is successfully verified
+    if (activeStep === 0 && loginSuccess) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    } else if (activeStep !== 0) {
+      // If it's not the first step, move to the next step directly
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
+
+    // Update skipped steps
+    if (activeStep === 0 && !loginSuccess) {
+      setSkipped(newSkipped);
+    }
   };
 
   const handleBack = () => {
@@ -133,53 +143,52 @@ const HorizontalLinearStepper = () => {
   };
 
   const login = async () => {
-  // Extract data from the form fields
-  const { phoneNumber, otp } = receiverDetails;
+    // Extract data from the form fields
+    const { phoneNumber, otp } = receiverDetails;
 
-  // Prepare the data to be sent for login
-  const loginData = {
-    mobileno: phoneNumber,
-    password: otp, // Assuming OTP is used as a password for simplicity
-  };
+    // Prepare the data to be sent for login
+    const loginData = {
+      mobileno: phoneNumber,
+      password: otp, // Assuming OTP is used as a password for simplicity
+    };
 
-  try {
-    // Make the HTTP POST request to the login endpoint
-    const response = await fetch(
-      "https://backprison.talentfort.live/api/v1/presonersignup/login",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(loginData),
+    try {
+      // Make the HTTP POST request to the login endpoint
+      const response = await fetch(
+        "https://backprison.talentfort.live/api/v1/presonersignup/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(loginData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    );
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      // You can handle the response here if needed
+      const responseData = await response.json();
+      console.log("Mobile Number Verified:", responseData);
+
+      // Set loginSuccess to true upon successful login
+      setLoginSuccess(true);
+
+      // Move to the next step or perform additional actions if login is successful
+      // handleNext();
+    } catch (error) {
+      console.error("Error logging in:", error.message);
+
+      // Check for a specific error message from the server
+      if (error.message.includes("Incorrect password")) {
+        setErrorMessage("Incorrect OTP. Please try again.");
+      } else {
+        setErrorMessage("Error logging in. Please try again.");
+      }
     }
-
-    // You can handle the response here if needed
-    const responseData = await response.json();
-    console.log("Mobile Number Verified:", responseData);
-
-    // Set loginSuccess to true upon successful login
-    setLoginSuccess(true);
-
-    // Move to the next step or perform additional actions if login is successful
-    // handleNext();
-  } catch (error) {
-    console.error("Error logging in:", error.message);
-
-    // Check for a specific error message from the server
-    if (error.message.includes("Incorrect password")) {
-      setErrorMessage("Incorrect OTP. Please try again.");
-    } else {
-      setErrorMessage("Error logging in. Please try again.");
-    }
-  }
-};
-
+  };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -275,7 +284,10 @@ const HorizontalLinearStepper = () => {
               sx={{ m: 1, width: "50ch" }}
               value={receiverDetails.otp}
               onChange={(e) =>
-                setReceiverDetails((prev) => ({ ...prev, otp: e.target.value }))
+                setReceiverDetails((prev) => ({
+                  ...prev,
+                  otp: e.target.value,
+                }))
               }
             />
             <Button

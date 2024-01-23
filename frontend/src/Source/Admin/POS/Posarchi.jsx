@@ -52,7 +52,7 @@ export default function Posarchi() {
   const removeFromCart = (index) => {
     setCart((prevCart) => {
       const updatedCart = [...prevCart];
-      updatedCart.splice(index, 1); 
+      updatedCart.splice(index, 1);
       return updatedCart;
     });
   };
@@ -236,13 +236,22 @@ export default function Posarchi() {
                     <br />
                     <div className="items">
                       {selectedMeal === "Breakfast" && (
-                        <Breakfast onClose={handleCloseMeal} addToCart={addToCart} />
+                        <Breakfast
+                          onClose={handleCloseMeal}
+                          addToCart={addToCart}
+                        />
                       )}
                       {selectedMeal === "lunch" && (
-                        <Lunch onClose={handleCloseMeal} addToCart={addToCart} />
+                        <Lunch
+                          onClose={handleCloseMeal}
+                          addToCart={addToCart}
+                        />
                       )}
                       {selectedMeal === "dinner" && (
-                        <Dinner onClose={handleCloseMeal} addToCart={addToCart} />
+                        <Dinner
+                          onClose={handleCloseMeal}
+                          addToCart={addToCart}
+                        />
                       )}
                     </div>
                   </div>
@@ -254,22 +263,30 @@ export default function Posarchi() {
             </Grid>
             <Grid item xs={4}>
               <Item>
-                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                  }}
+                >
                   <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
                   <Typography gutterBottom variant="h5" component="div">
                     Total: Rs. {calculateCartTotal().toFixed(2)}
                   </Typography>
-                  <Button
-                    variant="contained"
-                    style={{
-                      width: "200px",
-                      height: "50px",
-                      borderRadius: "10px",
-                    }}
-                    onClick={handleOpenModal}
-                  >
-                    Check Out
-                  </Button>
+                  {calculateCartTotal() > 0 && (
+                    <Button
+                      variant="contained"
+                      style={{
+                        width: "200px",
+                        height: "50px",
+                        borderRadius: "10px",
+                      }}
+                      onClick={handleOpenModal}
+                    >
+                      Check Out
+                    </Button>
+                  )}
                   <Modal open={modalOpen} onClose={handleCloseModal}>
                     <Box
                       sx={{
