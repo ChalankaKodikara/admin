@@ -188,6 +188,8 @@ export default function ItemCard({ addToCart }) {
             boxShadow: 24,
             p: 4,
             minHeight: 200,
+            borderRadius: "10px",
+
           }}
         >
           <AppBar position="static" color="default">
@@ -238,7 +240,7 @@ export default function ItemCard({ addToCart }) {
             </Button>
 
             <Button
-              variant="contained"
+              variant="soft"
               style={{
                 width: "340px",
                 height: "40px",
