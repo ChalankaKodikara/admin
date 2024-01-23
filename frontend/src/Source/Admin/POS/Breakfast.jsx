@@ -183,8 +183,8 @@ export default function ItemCard({ addToCart }) {
             left: "50%",
             bgcolor: "background.paper",
             transform: "translate(-50%, -50%)",
-            width: 1200,
-            height: 600,
+            width: 400,
+            height: 400,
             boxShadow: 24,
             p: 4,
             minHeight: 200,
@@ -213,22 +213,42 @@ export default function ItemCard({ addToCart }) {
                 <div key={index}>{checkbox}</div>
               ))}
             </TabPanel>
-            <TabPanel value={value} index={1} dir="ltr"></TabPanel>
+            <TabPanel value={value} index={1} dir="ltr">
+              {dateCheckboxes.map((checkbox, index) => (
+                <div key={index}>{checkbox}</div>
+              ))}{" "}
+            </TabPanel>
           </SwipeableViews>
-          <Button onClick={handleCloseModal}>Close</Button>
           <br />
-          <Button
-            variant="contained"
-            style={{
-              marginRight: "10px",
-              width: "200px",
-              height: "40px",
-              borderRadius: "10px",
-            }}
-            onClick={handleAddToCart}
+          <div
+            className="che"
+            style={{ textAlign: "center", marginTop: "10px" }}
           >
-            Add to Cart
-          </Button>
+            <Button
+              variant="contained"
+              style={{
+                width: "340px",
+                height: "40px",
+                borderRadius: "10px",
+                marginBottom: "10px", // Add margin to create a gap
+              }}
+              onClick={handleAddToCart}
+            >
+              Add to Cart
+            </Button>
+
+            <Button
+              variant="contained"
+              style={{
+                width: "340px",
+                height: "40px",
+                borderRadius: "10px",
+              }}
+              onClick={handleCloseModal}
+            >
+              Close
+            </Button>
+          </div>
         </Box>
       </Modal>
     </div>

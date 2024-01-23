@@ -212,7 +212,11 @@ export default function ItemCard({ addToCart }) {
                 <div key={index}>{checkbox}</div>
               ))}
             </TabPanel>
-            <TabPanel value={value} index={1} dir="ltr"></TabPanel>
+            <TabPanel value={value} index={1} dir="ltr">
+              {dateCheckboxes.map((checkbox, index) => (
+                <div key={index}>{checkbox}</div>
+              ))}{" "}
+            </TabPanel>
           </SwipeableViews>
           <Button onClick={handleCloseModal}>Close</Button>
           <br />

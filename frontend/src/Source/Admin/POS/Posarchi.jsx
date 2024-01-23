@@ -136,7 +136,7 @@ export default function Posarchi() {
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
-              pr: "24px", // keep right padding when drawer closed
+              pr: "24px",
             }}
           >
             <IconButton
@@ -234,7 +234,10 @@ export default function Posarchi() {
                       </Button>
                     </div>
                     <br />
-                    <div className="items">
+                    <div
+                      className="meals"
+                      style={{ textAlign: "center", marginTop: "10px" }}
+                    >
                       {selectedMeal === "Breakfast" && (
                         <Breakfast
                           onClose={handleCloseMeal}
@@ -265,7 +268,6 @@ export default function Posarchi() {
               <Item>
                 <Box
                   sx={{
-                    display: "flex",
                     flexDirection: "column",
                     alignItems: "flex-end",
                   }}

@@ -19,6 +19,7 @@ export default function ShoppingCart({ cart, removeFromCart }) {
     <div>
       {cart.map((item, index) => (
         <div key={item.product.id}>
+          
           <Card
             sx={{
               display: "flex",
