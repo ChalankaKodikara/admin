@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import SwipeableViews from "react-swipeable-views";
 import axios from "axios";
+import moment from "moment-timezone";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -114,30 +115,29 @@ export default function ItemCard({ addToCart }) {
   };
 
   const renderDateCheckboxes = () => {
-    const currentDate = new Date();
+    const currentDate = moment().tz("YourTimeZone"); // Replace "YourTimeZone" with your actual time zone
     const checkboxes = [];
-    for (let i = 0; i < 3; i++) {
-      const checkboxDate = new Date();
-      checkboxDate.setDate(currentDate.getDate() + i);
-      const formattedDate = `${checkboxDate.getDate()} ${checkboxDate.toLocaleString(
-        "default",
-        {
-          month: "short",
-        }
-      )}`;
+  
+    // If current time is after 12:01 am, start from the next day
+    const startDay = currentDate.hours() >= 0 && currentDate.minutes() > 1 ? 1 : 0;
+  
+    for (let i = startDay; i < startDay + 3; i++) {
+      const checkboxDate = moment().tz("YourTimeZone").add(i, "days");
+      const formattedDate = checkboxDate.format("D MMM");
       checkboxes.push(
         <FormGroup key={i}>
           <FormControlLabel
             control={<Checkbox />}
             label={`${formattedDate}`}
-            onClick={() => handleDateSelection(checkboxDate)}
+            onClick={() => handleDateSelection(checkboxDate.toDate())}
           />
         </FormGroup>
       );
     }
+  
     setDateCheckboxes(checkboxes);
   };
-
+  
   const handleDateSelection = (date) => {
     setSelectedDate(date);
   };

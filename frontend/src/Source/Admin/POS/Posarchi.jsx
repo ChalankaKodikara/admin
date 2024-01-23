@@ -131,7 +131,7 @@ export default function Posarchi() {
 
   return (
     <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", height: "1000px" }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
           <Toolbar
@@ -186,12 +186,19 @@ export default function Posarchi() {
                 ? theme.palette.grey[100]
                 : theme.palette.grey[900],
             flexGrow: 1,
-            height: "100vh",
+            height: "200vh",
             overflow: "auto",
           }}
         >
           <Toolbar />
-          <Grid container spacing={2}>
+          <Grid
+            container
+            spacing={2}
+            sx={{
+        
+              height: "200vh",
+            }}
+          >
             <Grid item xs={8}>
               <Item>
                 <div>
