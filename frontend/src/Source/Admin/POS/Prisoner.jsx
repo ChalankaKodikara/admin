@@ -14,6 +14,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/system";
+import Alert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 const steps = ["Receiver Details", "Bill Print", "Order Complete!"];
 
@@ -27,6 +31,7 @@ const HorizontalLinearStepper = () => {
     prisonerNumber: "",
     otp: "",
   });
+  const [loginSuccess, setLoginSuccess] = React.useState(false);
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -42,18 +47,17 @@ const HorizontalLinearStepper = () => {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-  
+
     // Save input fields in local storage when moving to the next step
     if (activeStep === 0) {
       const { prisonersName, phoneNumber, wardNumber, prisonerNumber } = receiverDetails;
       const inputData = { prisonersName, phoneNumber, wardNumber, prisonerNumber };
       localStorage.setItem("inputData", JSON.stringify(inputData));
     }
-  
+
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };
-  
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -150,7 +154,10 @@ const HorizontalLinearStepper = () => {
 
       // You can handle the response here if needed
       const responseData = await response.json();
-      console.log("Mobile Number Verifiyed:", responseData);
+      console.log("Mobile Number Verified:", responseData);
+
+      // Set loginSuccess to true upon successful login
+      setLoginSuccess(true);
 
       // Move to the next step or perform additional actions if login is successful
       // handleNext();
@@ -269,8 +276,34 @@ const HorizontalLinearStepper = () => {
             >
               Verify Number
             </Button>
+            {loginSuccess && (
+              <Alert
+                icon={<CheckCircleIcon fontSize="inherit" />}
+                severity="success"
+                sx={{ alignItems: 'flex-start', marginTop: 2 }}
+                action={
+                  <IconButton
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      setLoginSuccess(false);
+                    }}
+                  >
+                    <CloseRoundedIcon fontSize="inherit" />
+                  </IconButton>
+                }
+              >
+                <div>
+                  <div>Success</div>
+                  <Typography level="body-sm" color="success">
+                    Login successful! This is a success Alert.
+                  </Typography>
+                </div>
+              </Alert>
+            )}
           </div>
         );
+
       case 1:
         // Retrieve data from local storage
         const storedData = localStorage.getItem("cart");
@@ -302,8 +335,10 @@ const HorizontalLinearStepper = () => {
             </Table>
           </TableContainer>
         );
+
       case 2:
         return <Typography variant="h5">Order Complete</Typography>;
+
       default:
         return "Unknown step";
     }
