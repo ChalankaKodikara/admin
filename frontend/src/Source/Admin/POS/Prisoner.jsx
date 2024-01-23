@@ -32,6 +32,7 @@ const HorizontalLinearStepper = () => {
     otp: "",
   });
   const [loginSuccess, setLoginSuccess] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -50,8 +51,14 @@ const HorizontalLinearStepper = () => {
 
     // Save input fields in local storage when moving to the next step
     if (activeStep === 0) {
-      const { prisonersName, phoneNumber, wardNumber, prisonerNumber } = receiverDetails;
-      const inputData = { prisonersName, phoneNumber, wardNumber, prisonerNumber };
+      const { prisonersName, phoneNumber, wardNumber, prisonerNumber } =
+        receiverDetails;
+      const inputData = {
+        prisonersName,
+        phoneNumber,
+        wardNumber,
+        prisonerNumber,
+      };
       localStorage.setItem("inputData", JSON.stringify(inputData));
     }
 
@@ -126,45 +133,53 @@ const HorizontalLinearStepper = () => {
   };
 
   const login = async () => {
-    // Extract data from the form fields
-    const { phoneNumber, otp } = receiverDetails;
+  // Extract data from the form fields
+  const { phoneNumber, otp } = receiverDetails;
 
-    // Prepare the data to be sent for login
-    const loginData = {
-      mobileno: phoneNumber,
-      password: otp, // Assuming OTP is used as a password for simplicity
-    };
-
-    try {
-      // Make the HTTP POST request to the login endpoint
-      const response = await fetch(
-        "https://backprison.talentfort.live/api/v1/presonersignup/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(loginData),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      // You can handle the response here if needed
-      const responseData = await response.json();
-      console.log("Mobile Number Verified:", responseData);
-
-      // Set loginSuccess to true upon successful login
-      setLoginSuccess(true);
-
-      // Move to the next step or perform additional actions if login is successful
-      // handleNext();
-    } catch (error) {
-      console.error("Error logging in:", error.message);
-    }
+  // Prepare the data to be sent for login
+  const loginData = {
+    mobileno: phoneNumber,
+    password: otp, // Assuming OTP is used as a password for simplicity
   };
+
+  try {
+    // Make the HTTP POST request to the login endpoint
+    const response = await fetch(
+      "https://backprison.talentfort.live/api/v1/presonersignup/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    // You can handle the response here if needed
+    const responseData = await response.json();
+    console.log("Mobile Number Verified:", responseData);
+
+    // Set loginSuccess to true upon successful login
+    setLoginSuccess(true);
+
+    // Move to the next step or perform additional actions if login is successful
+    // handleNext();
+  } catch (error) {
+    console.error("Error logging in:", error.message);
+
+    // Check for a specific error message from the server
+    if (error.message.includes("Incorrect password")) {
+      setErrorMessage("Incorrect OTP. Please try again.");
+    } else {
+      setErrorMessage("Error logging in. Please try again.");
+    }
+  }
+};
+
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -280,7 +295,7 @@ const HorizontalLinearStepper = () => {
               <Alert
                 icon={<CheckCircleIcon fontSize="inherit" />}
                 severity="success"
-                sx={{ alignItems: 'flex-start', marginTop: 2 }}
+                sx={{ alignItems: "flex-start", marginTop: 2 }}
                 action={
                   <IconButton
                     color="inherit"
@@ -294,11 +309,27 @@ const HorizontalLinearStepper = () => {
                 }
               >
                 <div>
-                  <div>Success</div>
                   <Typography level="body-sm" color="success">
-                    Login successful! This is a success Alert.
+                    Mobile number verified successfully
                   </Typography>
                 </div>
+              </Alert>
+            )}
+            {errorMessage && (
+              <Alert
+                severity="error"
+                sx={{ marginTop: 2 }}
+                action={
+                  <IconButton
+                    color="inherit"
+                    size="small"
+                    onClick={() => setErrorMessage("")}
+                  >
+                    <CloseRoundedIcon fontSize="inherit" />
+                  </IconButton>
+                }
+              >
+                <Typography>{errorMessage}</Typography>
               </Alert>
             )}
           </div>
