@@ -116,14 +116,14 @@ export default function ItemCard({ addToCart }) {
   const renderDateCheckboxes = () => {
     const currentDate = moment();
     const checkboxes = [];
-  
+
     // If current time is before 1:59 pm, start from today, otherwise start from tomorrow
     const startDay = currentDate.hours() < 14 ? 0 : 1;
-  
+
     for (let i = startDay; i < startDay + 3; i++) {
-      const checkboxDate = moment().add(i, 'days');
-      const formattedDate = checkboxDate.format('DD MMM');
-  
+      const checkboxDate = moment().add(i, "days");
+      const formattedDate = checkboxDate.format("DD MMM");
+
       checkboxes.push(
         <FormGroup key={i}>
           <FormControlLabel
@@ -134,12 +134,10 @@ export default function ItemCard({ addToCart }) {
         </FormGroup>
       );
     }
-  
+
     setDateCheckboxes(checkboxes);
   };
-  
-  
-  
+
   const handleDateSelection = (date) => {
     setSelectedDate(date);
   };
@@ -150,6 +148,18 @@ export default function ItemCard({ addToCart }) {
       renderDateCheckboxes();
     }
   }, [modalOpen]);
+
+  const isOrderAllowed = () => {
+    const currentTime = moment();
+
+    // If current time is between 12:00 am and 11:00 am, staff can place an order
+    if (currentTime.hours() >= 0 && currentTime.hours() < 11) {
+      return true;
+    } else {
+      // If current time is between 11:01 am and 11:59 pm, staff cannot place an order
+      return false;
+    }
+  };
 
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
@@ -178,7 +188,7 @@ export default function ItemCard({ addToCart }) {
         </Card>
       ))}
       <Modal open={modalOpen} onClose={handleCloseModal}>
-      <Box
+        <Box
           sx={{
             position: "absolute",
             top: "50%",
@@ -191,7 +201,6 @@ export default function ItemCard({ addToCart }) {
             p: 4,
             minHeight: 200,
             borderRadius: "10px",
-
           }}
         >
           <AppBar position="static" color="default">
@@ -216,42 +225,74 @@ export default function ItemCard({ addToCart }) {
               {dateCheckboxes.map((checkbox, index) => (
                 <div key={index}>{checkbox}</div>
               ))}
+              <div
+                className="che"
+                style={{ textAlign: "center", marginTop: "10px" }}
+              >
+                <Button
+                  variant="contained"
+                  style={{
+                    width: "200px",
+                    height: "40px",
+                    borderRadius: "10px",
+                    marginBottom: "10px", // Add margin to create a gap
+                  }}
+                  onClick={handleAddToCart}
+                >
+                  Add to Cart
+                </Button>
+
+                <Button
+                  variant="soft"
+                  style={{
+                    width: "340px",
+                    height: "40px",
+                    borderRadius: "10px",
+                  }}
+                  onClick={handleCloseModal}
+                >
+                  Close
+                </Button>
+              </div>
             </TabPanel>
             <TabPanel value={value} index={1} dir="ltr">
-              {dateCheckboxes.map((checkbox, index) => (
-                <div key={index}>{checkbox}</div>
-              ))}{" "}
+              <div
+                className="che"
+                style={{ textAlign: "center", marginTop: "10px" }}
+              >
+                {isOrderAllowed() ? (
+                  <>
+                    <Button
+                      variant="contained"
+                      style={{
+                        width: "340px",
+                        height: "40px",
+                        borderRadius: "10px",
+                        marginBottom: "10px",
+                      }}
+                      onClick={handleAddToCart}
+                    >
+                      Add to Cart
+                    </Button>
+
+                    <Button
+                      variant="soft"
+                      style={{
+                        width: "340px",
+                        height: "40px",
+                        borderRadius: "10px",
+                      }}
+                      onClick={handleCloseModal}
+                    >
+                      Close
+                    </Button>
+                  </>
+                ) : (
+                  <p>Staff Cannot Place Order Right Now</p>
+                )}
+              </div>
             </TabPanel>
           </SwipeableViews>
-          <div
-            className="che"
-            style={{ textAlign: "center", marginTop: "10px" }}
-          >
-            <Button
-              variant="contained"
-              style={{
-                width: "340px",
-                height: "40px",
-                borderRadius: "10px",
-                marginBottom: "10px", // Add margin to create a gap
-              }}
-              onClick={handleAddToCart}
-            >
-              Add to Cart
-            </Button>
-
-            <Button
-              variant="soft"
-              style={{
-                width: "340px",
-                height: "40px",
-                borderRadius: "10px",
-              }}
-              onClick={handleCloseModal}
-            >
-              Close
-            </Button>
-          </div>
         </Box>
       </Modal>
     </div>
