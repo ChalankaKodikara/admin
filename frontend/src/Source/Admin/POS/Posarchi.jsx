@@ -316,7 +316,7 @@ export default function Posarchi() {
                         <Button
                           variant="contained"
                           style={{
-                            width: "400px",
+                            width: "300px",
                             height: "50px",
                             borderRadius: "10px",
                           }}
