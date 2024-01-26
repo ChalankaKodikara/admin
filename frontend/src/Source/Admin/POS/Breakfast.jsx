@@ -204,7 +204,7 @@ export default function ItemCard({ addToCart }) {
             borderRadius: "10px",
           }}
         >
-          <AppBar position="static" color="default">
+         <AppBar position="static" color="default">
             <Tabs
               value={value}
               onChange={handleChange}
@@ -213,8 +213,8 @@ export default function ItemCard({ addToCart }) {
               variant="fullWidth"
               aria-label="action tabs example"
             >
-              <Tab label="staff" />
-              <Tab label="Prison " />
+              <Tab label="Prisoner" />
+              <Tab label="Prisoner Staff " />
             </Tabs>
           </AppBar>
           <SwipeableViews

@@ -23,7 +23,7 @@ export default function ShoppingCart({ cart, removeFromCart }) {
           <Card
             sx={{
               display: "flex",
-              width: 400,
+              width: 300,
               height: 100,
             }}
           >

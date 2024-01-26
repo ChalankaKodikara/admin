@@ -153,7 +153,7 @@ export default function ItemCard({ addToCart }) {
     const currentTime = moment();
 
     // If current time is between 12:00 am and 11:00 am, staff can place an order
-    if (currentTime.hours() >= 0 && currentTime.hours() < 11) {
+    if (currentTime.hours() >= 0 && currentTime.hours() < 18) {
       return true;
     } else {
       // If current time is between 11:01 am and 11:59 pm, staff cannot place an order
@@ -195,7 +195,7 @@ export default function ItemCard({ addToCart }) {
             left: "50%",
             bgcolor: "background.paper",
             transform: "translate(-50%, -50%)",
-            width: 400,
+            width: 500,
             height: 400,
             boxShadow: 24,
             p: 4,
@@ -212,8 +212,8 @@ export default function ItemCard({ addToCart }) {
               variant="fullWidth"
               aria-label="action tabs example"
             >
-              <Tab label="staff" />
-              <Tab label="Prison " />
+              <Tab label="Prisoner" />
+              <Tab label="Prisoner Staff " />
             </Tabs>
           </AppBar>
           <SwipeableViews
@@ -265,10 +265,10 @@ export default function ItemCard({ addToCart }) {
                     <Button
                       variant="contained"
                       style={{
-                        width: "340px",
+                        width: "200px",
                         height: "40px",
                         borderRadius: "10px",
-                        marginBottom: "10px",
+                        marginBottom: "10px", // Add margin to create a gap
                       }}
                       onClick={handleAddToCart}
                     >

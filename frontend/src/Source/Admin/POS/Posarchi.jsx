@@ -131,8 +131,7 @@ export default function Posarchi() {
 
   return (
     <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: "flex", height: "1000px" }}>
-        <CssBaseline />
+      <Box sx={{ display: "flex" }}>
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
@@ -151,15 +150,6 @@ export default function Posarchi() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              POS
-            </Typography>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -186,89 +176,86 @@ export default function Posarchi() {
                 ? theme.palette.grey[100]
                 : theme.palette.grey[900],
             flexGrow: 1,
-            height: "200vh",
             overflow: "auto",
           }}
         >
           <Toolbar />
-          <Grid
-            container
-            spacing={2}
-            sx={{
-        
-              height: "200vh",
-            }}
-          >
+          <Grid container spacing={2}>
             <Grid item xs={8}>
               <Item>
-                <div>
+                <Box
+                  sx={{
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                    height: "600px",
+                  }}
+                >
                   <div>
                     <div>
-                      <Button
-                        variant="contained"
-                        style={{
-                          marginRight: "10px",
-                          width: "200px",
-                          height: "50px",
-                          borderRadius: "10px",
-                        }}
-                        onClick={handleOpenBreakfast}
+                      <div>
+                        <Button
+                          variant="contained"
+                          style={{
+                            marginRight: "10px",
+                            width: "200px",
+                            height: "50px",
+                            borderRadius: "10px",
+                          }}
+                          onClick={handleOpenBreakfast}
+                        >
+                          Breakfast
+                        </Button>
+                        <Button
+                          variant="contained"
+                          style={{
+                            marginRight: "10px",
+                            width: "200px",
+                            height: "50px",
+                            borderRadius: "10px",
+                          }}
+                          onClick={handleOpenLunch}
+                        >
+                          Lunch
+                        </Button>
+                        <Button
+                          variant="contained"
+                          style={{
+                            width: "200px",
+                            height: "50px",
+                            borderRadius: "10px",
+                          }}
+                          onClick={handleOpenDinner}
+                        >
+                          Dinner
+                        </Button>
+                      </div>
+                      <br />
+                      <div
+                        className="meals"
+                        style={{ textAlign: "center", marginTop: "10px" }}
                       >
-                        Breakfast
-                      </Button>
-                      <Button
-                        variant="contained"
-                        style={{
-                          marginRight: "10px",
-                          width: "200px",
-                          height: "50px",
-                          borderRadius: "10px",
-                        }}
-                        onClick={handleOpenLunch}
-                      >
-                        Lunch
-                      </Button>
-                      <Button
-                        variant="contained"
-                        style={{
-                          width: "200px",
-                          height: "50px",
-                          borderRadius: "10px",
-                        }}
-                        onClick={handleOpenDinner}
-                      >
-                        Dinner
-                      </Button>
-                    </div>
-                    <br />
-                    <div
-                      className="meals"
-                      style={{ textAlign: "center", marginTop: "10px" }}
-                    >
-                      {selectedMeal === "Breakfast" && (
-                        <Breakfast
-                          onClose={handleCloseMeal}
-                          addToCart={addToCart}
-                        />
-                      )}
-                      {selectedMeal === "lunch" && (
-                        <Lunch
-                          onClose={handleCloseMeal}
-                          addToCart={addToCart}
-                        />
-                      )}
-                      {selectedMeal === "dinner" && (
-                        <Dinner
-                          onClose={handleCloseMeal}
-                          addToCart={addToCart}
-                        />
-                      )}
+                        {selectedMeal === "Breakfast" && (
+                          <Breakfast
+                            onClose={handleCloseMeal}
+                            addToCart={addToCart}
+                          />
+                        )}
+                        {selectedMeal === "lunch" && (
+                          <Lunch
+                            onClose={handleCloseMeal}
+                            addToCart={addToCart}
+                          />
+                        )}
+                        {selectedMeal === "dinner" && (
+                          <Dinner
+                            onClose={handleCloseMeal}
+                            addToCart={addToCart}
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
-                  <br />
-                  <br />
-                  <br />
-                </div>
+                </Box>
               </Item>
             </Grid>
             <Grid item xs={4}>
@@ -277,25 +264,70 @@ export default function Posarchi() {
                   sx={{
                     flexDirection: "column",
                     alignItems: "flex-end",
+                    height: "600px",
                   }}
                 >
-                  <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
-                  <Typography gutterBottom variant="h5" component="div">
-                    Total: Rs. {calculateCartTotal().toFixed(2)}
-                  </Typography>
-                  {calculateCartTotal() > 0 && (
-                    <Button
-                      variant="contained"
-                      style={{
-                        width: "200px",
-                        height: "50px",
-                        borderRadius: "10px",
-                      }}
-                      onClick={handleOpenModal}
+                  <Box
+                    sx={{
+                      width: "100%",
+                      flexDirection: "column",
+                      alignItems: "flex-end",
+                      backgroundColor: "#0288d1",
+                      height: "50px",
+                      padding: "10px",
+                      boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      style={{ color: "white" }}
                     >
-                      Check Out
-                    </Button>
-                  )}
+                      Cart
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      flexDirection: "column",
+                      alignItems: "flex-end",
+                      height: "450px",
+                      padding: "10px",
+                    }}
+                  >
+                    <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
+                  </Box>
+                  <div>
+                    <Box
+                      sx={{
+                        width: "100%",
+                        flexDirection: "column",
+                        alignItems: "flex-end",
+                        backgroundColor: "#e3f2fd",
+                        height: "110px",
+                        padding: "10px",
+                        boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                      }}
+                    >
+                      <Typography gutterBottom variant="h5" component="div">
+                        Total: Rs. {calculateCartTotal().toFixed(2)}
+                      </Typography>
+                      {calculateCartTotal() > 0 && (
+                        <Button
+                          variant="contained"
+                          style={{
+                            width: "400px",
+                            height: "50px",
+                            borderRadius: "10px",
+                          }}
+                          onClick={handleOpenModal}
+                        >
+                          Check Out
+                        </Button>
+                      )}
+                    </Box>
+                  </div>
+
                   <Modal open={modalOpen} onClose={handleCloseModal}>
                     <Box
                       sx={{
