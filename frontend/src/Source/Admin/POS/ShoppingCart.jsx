@@ -9,23 +9,24 @@ export default function ShoppingCart({ cart, removeFromCart }) {
     // Remove from cart state
     removeFromCart(index);
 
-    // Remove from local storage
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-    existingCart.splice(index, 1); // Remove the item at the specified index
+    existingCart.splice(index, 1);
     localStorage.setItem("cart", JSON.stringify(existingCart));
   };
 
   return (
     <div>
-      {cart.map((item, index) => (
-        <div key={item.product.id}>
-          
-          <Card
-            sx={{
-              display: "flex",
-              width: 300,
-              height: 100,
-            }}
+    {cart.map((item, index) => (
+      <div key={item.product.id}>
+        <Card
+          sx={{
+            display: "flex",
+            width: 300,
+            height: 100,
+          }}
+        >
+          <div
+           
           >
             <Button
               variant="contained"
@@ -34,34 +35,38 @@ export default function ShoppingCart({ cart, removeFromCart }) {
               sx={{
                 width: "100px",
                 height: "30px",
+                alignSelf: "flex-end", 
               }}
             >
               Remove
             </Button>
-            <CardContent
-              sx={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
-            >
-              <div>
-                <Typography gutterBottom variant="h6" component="div">
-                  {item.product.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Price: {item.product.price}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Date: {item.date ? item.date.toDateString() : "N/A"}
-                </Typography>
-              </div>
-            </CardContent>
-          </Card>
-          <hr />
-        </div>
-      ))}
-    </div>
+          </div>
+  
+          <CardContent
+            sx={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <Typography gutterBottom variant="h6" component="div">
+                {item.product.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Price: {item.product.price}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Date: {item.date ? item.date.toDateString() : "N/A"}
+              </Typography>
+            </div>
+          </CardContent>
+        </Card>
+        <hr />
+      </div>
+    ))}
+  </div>
+  
   );
 }

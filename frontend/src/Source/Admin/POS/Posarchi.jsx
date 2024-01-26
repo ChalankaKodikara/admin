@@ -264,7 +264,7 @@ export default function Posarchi() {
                   sx={{
                     flexDirection: "column",
                     alignItems: "flex-end",
-                    height: "600px",
+                    height: "100%",
                   }}
                 >
                   <Box
@@ -303,7 +303,7 @@ export default function Posarchi() {
                         width: "100%",
                         flexDirection: "column",
                         alignItems: "flex-end",
-                        backgroundColor: "#e3f2fd",
+                        backgroundColor: "#6c757d",
                         height: "110px",
                         padding: "10px",
                         boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
