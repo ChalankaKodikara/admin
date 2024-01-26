@@ -13,15 +13,15 @@ import {
   Pie,
 } from "recharts";
 import Title from "../title";
+import Card from "@mui/material/Card";
 import { EventTracker } from "@devexpress/dx-react-chart";
 import useSalesData from "./useSalesData";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 import { PieChart } from "@mui/x-charts/PieChart";
 import { format } from "date-fns-tz";
-
+import { DataGrid } from "@mui/x-data-grid";
 const monthLabels = [
   "January",
   "February",
@@ -52,6 +52,7 @@ const MonthlySales = () => {
         amount: item.amount,
       };
     }
+    console.log("Sale:", item);
     return result;
   }, []);
 
@@ -110,6 +111,148 @@ const MonthlySales = () => {
   );
 };
 
+const SalesReport = () => {
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [totalAmount, setTotalAmount] = useState(null);
+  const [totalCardPayment, setTotalCardPayment] = useState(null);
+  const [totalCashPayment, setTotalCashPayment] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!startDate || !endDate) {
+        console.error("Please select both start and end dates.");
+        return;
+      }
+
+      try {
+        // Use your API endpoint here
+        const apiUrl = `http://localhost:8084/api/v1/getsalesreports?startdate=${format(
+          startDate,
+          "yyyy/MM/dd"
+        )}&enddate=${format(endDate, "yyyy/MM/dd")}`;
+
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+
+        // Process the data and calculate totals
+        const total = data.reduce((acc, item) => acc + item.totalPrice, 0);
+        setTotalAmount(total);
+
+        const cardPayments = data.filter(
+          (item) => item.paymentmethod.toLowerCase() === "card"
+        );
+        const totalCard = cardPayments.reduce(
+          (acc, item) => acc + item.totalPrice,
+          0
+        );
+        setTotalCardPayment(totalCard);
+
+        const cashPayments = data.filter(
+          (item) => item.paymentmethod.toLowerCase() === "cash"
+        );
+        const totalCash = cashPayments.reduce(
+          (acc, item) => acc + item.totalPrice,
+          0
+        );
+        setTotalCashPayment(totalCash);
+      } catch (error) {
+        console.error("Error fetching sales report:", error);
+      }
+    };
+
+    fetchData();
+  }, [startDate, endDate]);
+
+  return (
+    <div>
+      <Title>Sales Report</Title>
+      <div>
+        <label htmlFor="start-date">Start Date: </label>
+        <input
+          type="date"
+          id="start-date"
+          value={startDate ? format(startDate, "yyyy-MM-dd") : ""}
+          onChange={(e) => setStartDate(new Date(e.target.value))}
+        />
+      </div>
+      <div>
+        <label htmlFor="end-date">End Date: </label>
+        <input
+          type="date"
+          id="end-date"
+          value={endDate ? format(endDate, "yyyy-MM-dd") : ""}
+          onChange={(e) => setEndDate(new Date(e.target.value))}
+        />
+      </div>
+
+      {totalAmount !== null && (
+        <Card
+          component={Stack}
+          spacing={3}
+          direction="row"
+          sx={{
+            px: 3,
+            py: 5,
+            borderRadius: 2,
+          }}
+        >
+          <Stack spacing={0.5}>
+            <Typography variant="h4">{totalAmount}</Typography>
+            <Typography variant="subtitle2" sx={{ color: "text.disabled" }}>
+              Total Sales Amount
+            </Typography>
+          </Stack>
+        </Card>
+      )}
+
+      {totalCashPayment !== null && (
+        <Card
+          component={Stack}
+          spacing={3}
+          direction="row"
+          sx={{
+            px: 3,
+            py: 5,
+            borderRadius: 2,
+          }}
+        >
+          <Stack spacing={0.5}>
+            <Typography variant="h4">{totalCashPayment}</Typography>
+            <Typography variant="subtitle2" sx={{ color: "text.disabled" }}>
+              Total Cash Payment
+            </Typography>
+          </Stack>
+        </Card>
+      )}
+
+      {totalCardPayment !== null && (
+        <Card
+          component={Stack}
+          spacing={3}
+          direction="row"
+          sx={{
+            px: 3,
+            py: 5,
+            borderRadius: 2,
+          }}
+        >
+          <Stack spacing={0.5}>
+            <Typography variant="h4">{totalCardPayment}</Typography>
+            <Typography variant="subtitle2" sx={{ color: "text.disabled" }}>
+              Total Card Payment
+            </Typography>
+          </Stack>
+        </Card>
+      )}
+    </div>
+  );
+};
+
 const Topsell = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -117,15 +260,13 @@ const Topsell = () => {
   const theme = useTheme();
 
   useEffect(() => {
-    // Get today's date and format it as "yyyy-MM-dd"
-    const formattedDate = value ? format(value, "MMMM d, yyyy") : null;
-
+    // Get today's date and format it as "yyyy/MM/dd"
+    const formattedDate = value ? format(value, "yyyy/MM/dd") : null;
+    console.log("Date", formattedDate);
     // Update the API URL with the formatted date
-    const apiUrl = `https://backfood.tfdatamaster.com/api/v1/data/sales?date=${encodeURIComponent(
-      formattedDate
-    )}`;
+    const apiUrl = `http://localhost:8084/api/v1/data/topsellingitems?date=${formattedDate}`;
 
-    console.log("API URL:", apiUrl); // Log the API URL
+    console.log("API URLllll:", apiUrl); // Log the API URL
 
     // Clear the data before making the API request
     setData([]);
@@ -143,7 +284,7 @@ const Topsell = () => {
           // Process the data into the format expected by PieChart
           const chartData = apiData.map((item) => ({
             id: item._id, // Assuming you want to use _id as the id property
-            value: item.totalQuantity,
+            value: item.count,
             label: item._id, // You can use _id as the label property
           }));
           setData(chartData);
@@ -160,7 +301,7 @@ const Topsell = () => {
 
   return (
     <div>
-      <h2>Top Selling Items</h2>
+      <Title>Top Selling Item</Title>
       <div>
         <label htmlFor="top-sell-date">Select Date: </label>
         <input
@@ -246,4 +387,86 @@ const Chart = () => {
   );
 };
 
-export { Chart, MonthlySales, Topsell };
+const Table = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [value, setValue] = useState(null);
+  const [mealType, setMealType] = useState(""); // Initial meal type is an empty string
+
+  useEffect(() => {
+    const formattedDate = value ? format(value, "yyyy/MM/dd") : null;
+    const apiUrl = `http://localhost:8084/api/v1/data/topsellingitems?date=${formattedDate}&mealType=${mealType}`;
+
+    setData([]); // Clear the data before making the API request
+
+    fetch(apiUrl)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((apiData) => {
+        if (Array.isArray(apiData) && apiData.length > 0) {
+          const tableData = apiData.map((item, index) => ({
+            id: index + 1, // You can adjust this based on your data structure
+            ...item,
+          }));
+          setData(tableData);
+        } else {
+          setData([]);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
+  }, [value, mealType]);
+
+  const columns = [
+    { field: "_id", headerName: "Product Name", width: 200 },
+    { field: "count", headerName: "Count", width: 150 },
+  ];
+
+  return (
+    <div>
+      <Title>Total Orders</Title>
+      <div>
+        <label htmlFor="top-sell-date">Select Date: </label>
+        <input
+          type="date"
+          id="top-sell-date"
+          value={value ? format(value, "yyyy-MM-dd") : ""}
+          onChange={(e) => setValue(new Date(e.target.value))}
+        />
+      </div>
+      <div>
+        <label htmlFor="meal-type">Select Meal Type: </label>
+        <select
+          id="meal-type"
+          value={mealType}
+          onChange={(e) => setMealType(e.target.value)}
+        >
+          <option value="">All</option>
+          <option value="Breakfast">Breakfast</option>
+          <option value="Lunch">Lunch</option>
+          <option value="Diner">Dinner</option>
+        </select>
+      </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div style={{ height: "100%", width: "100%" }}>
+          {data.length > 0 ? (
+            <DataGrid rows={data} columns={columns} pageSize={5} />
+          ) : (
+            <p>No data available.</p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export { Chart, MonthlySales, Topsell, Table, SalesReport };

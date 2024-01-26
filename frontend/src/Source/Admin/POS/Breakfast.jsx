@@ -204,7 +204,7 @@ export default function ItemCard({ addToCart }) {
             borderRadius: "10px",
           }}
         >
-         <AppBar position="static" color="default">
+          <AppBar position="static" color="default">
             <Tabs
               value={value}
               onChange={handleChange}

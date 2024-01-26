@@ -293,6 +293,7 @@ export default function Posarchi() {
                       alignItems: "flex-end",
                       height: "450px",
                       padding: "10px",
+                      overflowY: "auto", // Add this line for vertical scrolling
                     }}
                   >
                     <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
