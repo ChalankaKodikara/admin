@@ -23,9 +23,7 @@ const Footer = () => {
   };
   const fetchSalesData = async () => {
     try {
-      const response = await axios.get(
-        "https://backfood.tfdatamaster.com/api/v1/getsales"
-      );
+      const response = await axios.get("http://localhost:8084/api/v1/getsales");
       const salesData = response.data;
       const lastElement = salesData[salesData.length - 1].orderId;
 

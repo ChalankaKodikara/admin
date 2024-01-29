@@ -307,6 +307,7 @@ export default function Posarchi() {
                         backgroundColor: "#6c757d",
                         height: "110px",
                         padding: "10px",
+                        overflowY: "auto", // Add this line for vertical scrolling
 
                         boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
                       }}
