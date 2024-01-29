@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
@@ -26,7 +26,15 @@ import Prisoner from "./Prisoner";
 import Lunch from "./Lunch";
 import Breakfast from "./Breakfast";
 import Dinner from "./Dinner";
-import Jailer from "./Jailer"; // Make sure to adjust the path if needed
+import Jailer from "./Jailer";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+
+// Make sure to adjust the path if needed
 function Item(props) {
   return (
     <Paper sx={{ p: 2, textAlign: "center", color: "text.secondary" }}>
@@ -40,6 +48,8 @@ export default function Posarchi() {
   const [cart, setCart] = React.useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState(null);
+  const [discountModalOpen, setDiscountModalOpen] = useState(false);
+  const [vatModalOpen, setvatModalOpen] = useState(false);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -58,10 +68,22 @@ export default function Posarchi() {
   };
 
   const calculateCartTotal = () => {
-    return cart.reduce(
+    const itemTotal = cart.reduce(
       (total, item) => total + parseFloat(item.product.price),
       0
     );
+
+    const vat = itemTotal * 0.18; // 18% VAT
+    const serviceCharge = itemTotal * 0.1; // 10% service charge
+
+    const netTotal = itemTotal + vat + serviceCharge;
+
+    return {
+      itemTotal: itemTotal.toFixed(2),
+      vat: vat.toFixed(2),
+      serviceCharge: serviceCharge.toFixed(2),
+      netTotal: netTotal.toFixed(2),
+    };
   };
 
   const handleOpenModal = () => {
@@ -71,7 +93,21 @@ export default function Posarchi() {
   const handleCloseModal = () => {
     setModalOpen(false);
   };
+  const handleOpenDiscountModal = () => {
+    setDiscountModalOpen(true);
+  };
 
+  const handleCloseDiscountModal = () => {
+    setDiscountModalOpen(false);
+  };
+
+  const handleOpenvatModal = () => {
+    setvatModalOpen(true);
+  };
+
+  const handleClosevatModal = () => {
+    setvatModalOpen(false);
+  };
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -166,7 +202,7 @@ export default function Posarchi() {
               noWrap
               sx={{
                 flexGrow: 1,
-                marginLeft: "1200px", // Adjust the desired left margin
+                marginLeft: "900px", // Adjust the desired left margin
               }}
             >
               CART
@@ -284,6 +320,7 @@ export default function Posarchi() {
                       </Box>
                       <Button
                         variant="contained"
+                        onClick={handleOpenvatModal}
                         style={{
                           marginRight: "10px",
                           width: "200px",
@@ -291,10 +328,75 @@ export default function Posarchi() {
                           borderRadius: "10px",
                         }}
                       >
-                        Add Vat
+                        Add VAT
                       </Button>
+
+                      <Modal open={vatModalOpen} onClose={handleClosevatModal}>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            width: 300,
+                            bgcolor: "background.paper",
+                            boxShadow: 24,
+                            p: 4,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            borderRadius: "10px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography
+                            variant="h6"
+                            component="div"
+                            style={{
+                              marginTop: "10px",
+                              alignItems: "start",
+                            }}
+                          >
+                            Add VAT{" "}
+                          </Typography>
+                          <TextField
+                            hiddenLabel
+                            id="Discount"
+                            defaultValue="%"
+                            variant="filled"
+                            size="small"
+                            style={{
+                              marginTop: "10px",
+                            }}
+                          />
+                          <Button
+                            variant="contained"
+                            // onClick={handleOpenDiscountModal}
+                            style={{
+                              marginTop: "50px",
+                              width: "200px",
+                              height: "40px",
+                              borderRadius: "10px",
+                            }}
+                          >
+                            Add Vat
+                          </Button>
+                          <Button
+                            onClick={handleClosevatModal}
+                            style={{
+                              width: "200px",
+                              height: "40px",
+                              borderRadius: "10px",
+                            }}
+                          >
+                            Close
+                          </Button>
+                        </Box>
+                      </Modal>
+
                       <Button
                         variant="contained"
+                        onClick={handleOpenDiscountModal}
                         style={{
                           marginRight: "10px",
                           width: "200px",
@@ -302,8 +404,75 @@ export default function Posarchi() {
                           borderRadius: "10px",
                         }}
                       >
-                        Add disscount
+                        Add discount
                       </Button>
+
+                      <Modal
+                        open={discountModalOpen}
+                        onClose={handleCloseDiscountModal}
+                      >
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            width: 300,
+                            bgcolor: "background.paper",
+                            boxShadow: 24,
+                            p: 4,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            borderRadius: "10px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography
+                            variant="h6"
+                            component="div"
+                            style={{
+                              marginTop: "10px",
+                              alignItems: "start",
+                            }}
+                          >
+                            Add Disscount{" "}
+                          </Typography>
+                          <TextField
+                            hiddenLabel
+                            id="Discount"
+                            defaultValue="%"
+                            variant="filled"
+                            size="small"
+                            style={{
+                              marginTop: "10px",
+                            }}
+                          />
+                          <Button
+                            variant="contained"
+                            // onClick={handleOpenDiscountModal}
+                            style={{
+                              marginTop: "50px",
+                              width: "200px",
+                              height: "40px",
+                              borderRadius: "10px",
+                            }}
+                          >
+                            Add discount
+                          </Button>
+                          <Button
+                            onClick={handleCloseDiscountModal}
+                            style={{
+                              width: "200px",
+                              height: "40px",
+                              borderRadius: "10px",
+                            }}
+                          >
+                            Close
+                          </Button>
+                        </Box>
+                      </Modal>
+
                       <Button
                         variant="contained"
                         style={{
@@ -352,22 +521,101 @@ export default function Posarchi() {
                         boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
                       }}
                     >
-                      <Typography gutterBottom variant="h5" component="div" style={{ color: "white" }}>
-                        Total: Rs. {calculateCartTotal().toFixed(2)}
-                      </Typography>
-                      {calculateCartTotal() > 0 && (
-                        <Button
-                          variant="contained"
-                          style={{
-                            width: "300px",
-                            height: "50px",
-                            borderRadius: "10px",
-                          }}
-                          onClick={handleOpenModal}
-                        >
-                          Check Out
-                        </Button>
-                      )}
+                      <Box
+                        sx={{
+                          width: "100%",
+                          backgroundColor: "#0288d1",
+                          height: "100px",
+                        }}
+                      >
+                        <TableContainer component={Paper}>
+                          <Table
+                            sx={{
+                              width: "100%",
+                              backgroundColor: "#0288d1",
+                              height: "10px",
+                            }}
+                            size="small"
+                            aria-label="a dense table"
+                          >
+                            <TableBody>
+                              <TableRow>
+                                <TableCell
+                                  align="right"
+                                  style={{
+                                    color: "white",
+                                    fontSize: "14px",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  Item Total:
+                                </TableCell>
+                                <TableCell
+                                  align="right"
+                                  style={{ color: "white", fontSize: "14px" }}
+                                >
+                                  {calculateCartTotal().itemTotal}{" "}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  align="right"
+                                  style={{
+                                    color: "white",
+                                    fontSize: "14px",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  VAT (18%):
+                                </TableCell>
+                                <TableCell
+                                  align="right"
+                                  style={{ color: "white", fontSize: "14px" }}
+                                >
+                                  {calculateCartTotal().vat}{" "}
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell
+                                  align="right"
+                                  style={{
+                                    color: "white",
+                                    fontSize: "14px",
+                                    textAlign: "left",
+                                  }}
+                                >
+                                  Service Charge (10%):
+                                </TableCell>
+                                <TableCell
+                                  align="right"
+                                  style={{ color: "white", fontSize: "14px" }}
+                                >
+                                  {calculateCartTotal().serviceCharge}
+                                </TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </Box>
+                      <Button
+                        variant="contained"
+                        style={{
+                          width: "100%",
+                          height: "45px",
+                          borderRadius: "10px",
+                          backgroundColor: "green",
+                        }}
+                        onClick={
+                          parseFloat(calculateCartTotal().netTotal) > 0
+                            ? handleOpenModal
+                            : null
+                        }
+                        disabled={
+                          parseFloat(calculateCartTotal().netTotal) <= 0
+                        }
+                      >
+                        Check Out Rs.{calculateCartTotal().netTotal}
+                      </Button>
                     </Box>
                   </div>
 
