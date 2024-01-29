@@ -78,7 +78,7 @@ const OrderDetailsDialog = ({ open, onClose, orders }) => {
             {orders.map((order) => (
               <div key={order.id} style={{ ...receiptStyles }}>
                 <div style={{ textAlign: "center", margin: "auto" }}>
-                  <strong>Mexican Hoppers</strong>
+                  <strong>Ayu-Ventures</strong>
                 </div>
 
                 <div style={{ textAlign: "center", margin: "auto" }}>

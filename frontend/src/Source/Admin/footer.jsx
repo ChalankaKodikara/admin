@@ -134,7 +134,7 @@ const Footer = () => {
         </Stack>
       </Stack>
       <Typography variant="body2" sx={{ marginTop: "10px" }}>
-        © 2023 MEXICAN HOPPERS. All rights reserved.
+        © 2023 Ayu-Ventures. All rights reserved.
       </Typography>
     </Box>
   );

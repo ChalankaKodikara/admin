@@ -293,6 +293,7 @@ export default function Posarchi() {
                       alignItems: "flex-end",
                       height: "450px",
                       padding: "10px",
+                      overflowY: "auto", // Add this line for vertical scrolling
                     }}
                   >
                     <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
@@ -306,6 +307,7 @@ export default function Posarchi() {
                         backgroundColor: "#6c757d",
                         height: "110px",
                         padding: "10px",
+
                         boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
                       }}
                     >
