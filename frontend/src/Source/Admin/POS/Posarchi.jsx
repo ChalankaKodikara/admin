@@ -164,6 +164,7 @@ export default function Posarchi() {
   const handleCloseMeal = () => {
     setSelectedMeal(null);
   };
+  
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -503,7 +504,7 @@ export default function Posarchi() {
                       alignItems: "flex-end",
                       height: "450px",
                       padding: "10px",
-                      overflowY: "auto", // Add this line for vertical scrolling
+                      overflowY: "auto", 
                     }}
                   >
                     <ShoppingCart cart={cart} removeFromCart={removeFromCart} />

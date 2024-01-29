@@ -30,7 +30,6 @@ export default function ShoppingCart({ cart, removeFromCart }) {
             <TableCell style={{ color: "white" }}>Date</TableCell>
             <TableCell style={{ color: "white" }}>Action</TableCell>
           </TableRow>
-          
         </TableHead>
         <TableBody>
           {cart.map((item, index) => (
