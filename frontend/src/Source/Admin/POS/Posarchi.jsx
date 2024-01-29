@@ -150,6 +150,27 @@ export default function Posarchi() {
             >
               <MenuIcon />
             </IconButton>
+            <Typography
+              component="h1"
+              variant="h6"
+              color="inherit"
+              noWrap
+              sx={{ flexGrow: 1 }}
+            >
+              POS
+            </Typography>
+            <Typography
+              component="h1"
+              variant="h6"
+              color="inherit"
+              noWrap
+              sx={{
+                flexGrow: 1,
+                marginLeft: "1200px", // Adjust the desired left margin
+              }}
+            >
+              CART
+            </Typography>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -230,29 +251,69 @@ export default function Posarchi() {
                         </Button>
                       </div>
                       <br />
-                      <div
-                        className="meals"
-                        style={{ textAlign: "center", marginTop: "10px" }}
+                      <Box
+                        sx={{
+                          flexDirection: "column",
+                          alignItems: "flex-end",
+                          height: "450px",
+                        }}
                       >
-                        {selectedMeal === "Breakfast" && (
-                          <Breakfast
-                            onClose={handleCloseMeal}
-                            addToCart={addToCart}
-                          />
-                        )}
-                        {selectedMeal === "lunch" && (
-                          <Lunch
-                            onClose={handleCloseMeal}
-                            addToCart={addToCart}
-                          />
-                        )}
-                        {selectedMeal === "dinner" && (
-                          <Dinner
-                            onClose={handleCloseMeal}
-                            addToCart={addToCart}
-                          />
-                        )}
-                      </div>
+                        <div
+                          className="meals"
+                          style={{ textAlign: "center", marginTop: "10px" }}
+                        >
+                          {selectedMeal === "Breakfast" && (
+                            <Breakfast
+                              onClose={handleCloseMeal}
+                              addToCart={addToCart}
+                            />
+                          )}
+                          {selectedMeal === "lunch" && (
+                            <Lunch
+                              onClose={handleCloseMeal}
+                              addToCart={addToCart}
+                            />
+                          )}
+                          {selectedMeal === "dinner" && (
+                            <Dinner
+                              onClose={handleCloseMeal}
+                              addToCart={addToCart}
+                            />
+                          )}
+                        </div>{" "}
+                      </Box>
+                      <Button
+                        variant="contained"
+                        style={{
+                          marginRight: "10px",
+                          width: "200px",
+                          height: "50px",
+                          borderRadius: "10px",
+                        }}
+                      >
+                        Add Vat
+                      </Button>
+                      <Button
+                        variant="contained"
+                        style={{
+                          marginRight: "10px",
+                          width: "200px",
+                          height: "50px",
+                          borderRadius: "10px",
+                        }}
+                      >
+                        Add disscount
+                      </Button>
+                      <Button
+                        variant="contained"
+                        style={{
+                          width: "200px",
+                          height: "50px",
+                          borderRadius: "10px",
+                        }}
+                      >
+                        Add Note
+                      </Button>
                     </div>
                   </div>
                 </Box>
@@ -267,26 +328,6 @@ export default function Posarchi() {
                     height: "100%",
                   }}
                 >
-                  <Box
-                    sx={{
-                      width: "100%",
-                      flexDirection: "column",
-                      alignItems: "flex-end",
-                      backgroundColor: "#0288d1",
-                      height: "50px",
-                      padding: "10px",
-                      boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-                    }}
-                  >
-                    <Typography
-                      gutterBottom
-                      variant="h5"
-                      component="div"
-                      style={{ color: "white" }}
-                    >
-                      Cart
-                    </Typography>
-                  </Box>
                   <Box
                     sx={{
                       flexDirection: "column",
@@ -304,15 +345,14 @@ export default function Posarchi() {
                         width: "100%",
                         flexDirection: "column",
                         alignItems: "flex-end",
-                        backgroundColor: "#6c757d",
-                        height: "110px",
+                        backgroundColor: "#0288d1",
+                        height: "160px",
                         padding: "10px",
-                        overflowY: "auto", // Add this line for vertical scrolling
-
+                        overflowY: "auto",
                         boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
                       }}
                     >
-                      <Typography gutterBottom variant="h5" component="div">
+                      <Typography gutterBottom variant="h5" component="div" style={{ color: "white" }}>
                         Total: Rs. {calculateCartTotal().toFixed(2)}
                       </Typography>
                       {calculateCartTotal() > 0 && (

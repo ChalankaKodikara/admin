@@ -24,37 +24,33 @@ export default function ShoppingCart({ cart, removeFromCart }) {
     <TableContainer component={Paper}>
       <Table aria-label="cart table">
         <TableHead>
-          <TableRow>
-            <TableCell>Product Name</TableCell>
-            <TableCell>Price</TableCell>
-            <TableCell>Date</TableCell>
-            <TableCell>Action</TableCell>
+          <TableRow style={{ backgroundColor: "#0288d1" }}>
+            <TableCell style={{ color: "white" }}>Product Name</TableCell>
+            <TableCell style={{ color: "white" }}>Price</TableCell>
+            <TableCell style={{ color: "white" }}>Date</TableCell>
+            <TableCell style={{ color: "white" }}>Action</TableCell>
           </TableRow>
+          
         </TableHead>
         <TableBody>
           {cart.map((item, index) => (
-            <TableRow key={item.product.id}>
+            <TableRow key={item.product.id} style={{ height: "10px" }}>
               <TableCell>
-                <Typography variant="subtitle1">
-                  {item.product.name}
-                </Typography>
+                <Typography variant="subtitle2">{item.product.name}</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="subtitle1">
+                <Typography variant="subtitle2">
                   {item.product.price}
                 </Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="subtitle1">
+                <Typography variant="subtitle2">
                   {item.date ? item.date.toDateString() : "N/A"}
                 </Typography>
               </TableCell>
               <TableCell>
-                <IconButton
-                  color="error"
-                  onClick={() => handleRemove(index)}
-                >
-                  <DeleteIcon />
+                <IconButton color="error" onClick={() => handleRemove(index)}>
+                  <DeleteIcon style={{ fontSize: "15px" }} />
                 </IconButton>
               </TableCell>
             </TableRow>

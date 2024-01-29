@@ -33,6 +33,7 @@ const HorizontalLinearStepper = () => {
   });
   const [loginSuccess, setLoginSuccess] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
+  const [cart, setCart] = React.useState([]);
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -209,6 +210,12 @@ const HorizontalLinearStepper = () => {
       border: 0,
     },
   }));
+  const calculateCartTotal = () => {
+    return cart.reduce(
+      (total, item) => total + parseFloat(item.product.price),
+      0
+    );
+  };
 
   const getStepContent = (step) => {
     switch (step) {
@@ -380,7 +387,9 @@ const HorizontalLinearStepper = () => {
         );
 
       case 2:
-        return <Typography variant="h5">Order Complete</Typography>;
+        return<Typography gutterBottom variant="h5" component="div">
+        Total: Rs. {calculateCartTotal().toFixed(2)}
+      </Typography>;
 
       default:
         return "Unknown step";
