@@ -28,7 +28,7 @@ const HorizontalLinearStepper = () => {
     prisonersName: "",
     phoneNumber: "",
     wardNumber: "",
-    prisonerNumber: "",
+    employeeid: "",
     otp: "",
   });
   const [loginSuccess, setLoginSuccess] = React.useState(false);
@@ -210,11 +210,9 @@ const HorizontalLinearStepper = () => {
       border: 0,
     },
   }));
-  const calculateCartTotal = () => {
-    return cart.reduce(
-      (total, item) => total + parseFloat(item.product.price),
-      0
-    );
+
+  const calculateCartTotal = (cart) => {
+    return cart.reduce((total, item) => total + parseFloat(item.price), 0);
   };
 
   const getStepContent = (step) => {
@@ -358,38 +356,80 @@ const HorizontalLinearStepper = () => {
         // Retrieve data from local storage
         const storedData = localStorage.getItem("cart");
         const cartData = storedData ? JSON.parse(storedData) : [];
+        const total = calculateCartTotal(cartData); // Calculate the total
 
         return (
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>Name</StyledTableCell>
-                  <StyledTableCell>Price</StyledTableCell>
-                  <StyledTableCell>Category</StyledTableCell>
-                  <StyledTableCell>Date</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {cartData.map((item, index) => (
-                  <StyledTableRow key={index}>
-                    <StyledTableCell>{item.name}</StyledTableCell>
-                    <StyledTableCell>{item.price}</StyledTableCell>
-                    <StyledTableCell>{item.category}</StyledTableCell>
-                    <StyledTableCell>
-                      {item.date ? new Date(item.date).toDateString() : "N/A"}
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <div>
+            <TableContainer component={Paper}>
+              <Table
+                sx={{
+                  width: "100%",
+                  height: "10px",
+                }}
+                size="small"
+                aria-label="a dense table"
+              >
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>Name</StyledTableCell>
+                    <StyledTableCell>Price</StyledTableCell>
+                    <StyledTableCell>Category</StyledTableCell>
+                    <StyledTableCell>Date</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {cartData.map((item, index) => (
+                    <StyledTableRow key={index}>
+                      <StyledTableCell>{item.name}</StyledTableCell>
+                      <StyledTableCell>{item.price}</StyledTableCell>
+                      <StyledTableCell>{item.category}</StyledTableCell>
+                      <StyledTableCell>
+                        {item.date ? new Date(item.date).toDateString() : "N/A"}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Typography variant="h6" sx={{ marginTop: 2 }}>
+              Total: ${total} {/* Display the total */}
+            </Typography>
+          </div>
         );
 
       case 2:
-        return<Typography gutterBottom variant="h5" component="div">
-        Total: Rs. {calculateCartTotal().toFixed(2)}
-      </Typography>;
+        // Retrieve data from local storage
+        const storedCartData = localStorage.getItem("cart");
+        const storedCart = storedCartData ? JSON.parse(storedCartData) : [];
+
+        return (
+          <div>
+            <TableContainer component={Paper}>
+              <Table
+                sx={{ minWidth: 650 }}
+                size="small"
+                aria-label="a dense table"
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Items</TableCell>
+                    <TableCell align="right">Price</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {storedCart.map((item, index) => (
+                    <TableRow key={index}>
+                      <TableCell component="th" scope="row">
+                        {item.name}
+                      </TableCell>
+                      <TableCell align="right">{item.price}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        );
 
       default:
         return "Unknown step";

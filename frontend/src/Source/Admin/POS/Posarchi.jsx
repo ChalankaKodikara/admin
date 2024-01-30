@@ -180,7 +180,35 @@ export default function Posarchi() {
   //   localStorage.removeItem("cart");
   //   window.location.reload(localStorage.removeItem("cart"););
   // };
+  const sendDataToEndpoint = async () => {
+    // Retrieve data from local storage
+    const storedCartData = localStorage.getItem("cart");
+    const storedCart = storedCartData ? JSON.parse(storedCartData) : [];
 
+    try {
+      // Make the HTTP POST request to the specified endpoint
+      const response = await fetch("http://localhost:8084/api/v1/addsale", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(storedCart),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // You can handle the response here if needed
+      const responseData = await response.json();
+      console.log("Response from the server:", responseData);
+
+      // Optionally, you can clear the local storage after successful submission
+      localStorage.removeItem("cart");
+    } catch (error) {
+      console.error("Error sending data to the endpoint:", error.message);
+    }
+  };
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -692,7 +720,10 @@ export default function Posarchi() {
                           height: "50px",
                           borderRadius: "10px",
                         }}
-                        onClick={handleCloseModal}
+                        onClick={() => {
+                          sendDataToEndpoint();
+                          handleCloseModal(); // Assuming you also want to close the modal
+                        }}
                       >
                         Print & Complete Order
                       </Button>

@@ -90,11 +90,11 @@ export default function ItemCard({ addToCart }) {
       // Save the selected product ID and date in local storage
       const { itemid, name, price, category } = selectedProduct; // Extract the product details
       const cartItem = {
-        productId: itemid,
-        date: selectedDate,
-        name,
+        productName:name,
+        itemid,
+        date: moment(selectedDate).format("YYYY/MM/DD"),
+        meal:category,
         price,
-        category,
       };
 
       // Save in local storage

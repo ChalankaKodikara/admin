@@ -11,7 +11,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Typography from "@mui/material/Typography";
 
 export default function ShoppingCart({ cart, removeFromCart, setCart }) {
-  const handleRemove = (index) => {
+   const handleRemove = (index) => {
     // Remove from cart state
     removeFromCart(index);
 
@@ -35,7 +35,8 @@ export default function ShoppingCart({ cart, removeFromCart, setCart }) {
           {cart.map((item, index) => (
             <TableRow key={item.product.id} style={{ height: "10px" }}>
               <TableCell>
-                <Typography variant="subtitle2">{item.product.name}</Typography>
+              <Typography variant="subtitle2">{item.product.name}</Typography>
+
               </TableCell>
               <TableCell>
                 <Typography variant="subtitle2">
