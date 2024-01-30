@@ -55,10 +55,12 @@ const HorizontalLinearStepper = () => {
       const { prisonersName, phoneNumber, wardNumber, prisonerNumber } =
         receiverDetails;
       const inputData = {
-        prisonersName,
-        phoneNumber,
-        wardNumber,
-        prisonerNumber,
+        customerName:prisonersName,
+        mobileno:phoneNumber,
+        WardNo:wardNumber,
+        PresonserId:prisonerNumber,
+        role: "Presoner"
+
       };
       localStorage.setItem("inputData", JSON.stringify(inputData));
     }
