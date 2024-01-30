@@ -181,14 +181,14 @@ export default function Posarchi() {
   //   window.location.reload(localStorage.removeItem("cart"););
   // };
   const sendDataToEndpoint = async () => {
-    // Retrieve data from local storage
-    const storedCartData = localStorage.getItem("cart");
-    const storedCart = storedCartData ? JSON.parse(storedCartData) : [];
-
     try {
+      // Retrieve data from local storage
+      const storedCartData = localStorage.getItem("cart");
+      const storedCart = storedCartData ? JSON.parse(storedCartData) : [];
+  
       // Extract customer details from local storage
       const customerDetails = JSON.parse(localStorage.getItem("inputData"));
-
+  
       // Create the final payload structure
       const payload = {
         customerName: customerDetails.customerName,
@@ -199,30 +199,22 @@ export default function Posarchi() {
           },
         ],
         products: storedCart
-          .map((item) => {
-            // Check if the necessary properties exist in the cart item
-            if (item.product && item.product.productName) {
-              return {
-                productName: item.product.productName,
-                itemid: item.product.itemid,
-                date: item.date,
-                meal: item.product.meal,
-                price: item.product.price,
-              };
-            }
-            // Handle the case where properties are missing (you can modify this part)
-            console.error("Invalid cart item:", item);
-            return null;
-          })
-          .filter(Boolean), // Remove null items from the array
+          .filter((item) => item.productName) // Filter out items without productName
+          .map((item) => ({
+            productName: item.productName,
+            itemid: item.itemid,
+            date: item.date,
+            meal: item.meal,
+            price: item.price,
+          })),
         totalPrice: 0, // Calculate the total price based on your logic
         productStatus: "", // Set this based on your logic
         mobileno: customerDetails.phoneNumber,
         role: customerDetails.role,
       };
-
+  
       console.log("Sending data to the server:", payload);
-
+  
       // Make the HTTP POST request to the specified endpoint
       const response = await fetch("https://backprison.talentfort.live/api/v1/addsale", {
         method: "POST",
@@ -231,21 +223,22 @@ export default function Posarchi() {
         },
         body: JSON.stringify(payload),
       });
-
+  
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
+  
       // You can handle the response here if needed
       const responseData = await response.json();
       console.log("Response from the server:", responseData);
-
+  
       // Optionally, you can clear the local storage after successful submission
       localStorage.removeItem("cart");
     } catch (error) {
       console.error("Error sending data to the endpoint:", error.message);
     }
   };
+  
 
   return (
     <ThemeProvider theme={mdTheme}>
