@@ -10,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Typography from "@mui/material/Typography";
 
-export default function ShoppingCart({ cart, removeFromCart }) {
+export default function ShoppingCart({ cart, removeFromCart, setCart }) {
   const handleRemove = (index) => {
     // Remove from cart state
     removeFromCart(index);
@@ -19,7 +19,7 @@ export default function ShoppingCart({ cart, removeFromCart }) {
     existingCart.splice(index, 1);
     localStorage.setItem("cart", JSON.stringify(existingCart));
   };
-
+  
   return (
     <TableContainer component={Paper}>
       <Table aria-label="cart table">

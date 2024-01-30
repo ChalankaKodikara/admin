@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -31,11 +31,23 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
 // Make sure to adjust the path if needed
 function Item(props) {
+  useEffect(() => {
+    // Check if props.children is null and remove local storage
+    if (props.children === null) {
+      clearLocalStorage();
+    }
+  }, [props.children]);
+
+  const clearLocalStorage = () => {
+    // Clear local storage
+    localStorage.removeItem("cart");
+    console.log("Clear cookies");
+  };
+
   return (
     <Paper sx={{ p: 2, textAlign: "center", color: "text.secondary" }}>
       {props.children}
@@ -164,7 +176,11 @@ export default function Posarchi() {
   const handleCloseMeal = () => {
     setSelectedMeal(null);
   };
-  
+  // const handleClearLocalStorage = () => {
+  //   localStorage.removeItem("cart");
+  //   window.location.reload(localStorage.removeItem("cart"););
+  // };
+
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -474,16 +490,18 @@ export default function Posarchi() {
                         </Box>
                       </Modal>
 
-                      <Button
+                      {/* <Button
                         variant="contained"
                         style={{
+                          marginTop: "10px",
                           width: "200px",
                           height: "50px",
                           borderRadius: "10px",
                         }}
+                        onClick={handleClearLocalStorage}
                       >
-                        Add Note
-                      </Button>
+                        Clear Local Storage
+                      </Button> */}
                     </div>
                   </div>
                 </Box>
@@ -504,7 +522,7 @@ export default function Posarchi() {
                       alignItems: "flex-end",
                       height: "450px",
                       padding: "10px",
-                      overflowY: "auto", 
+                      overflowY: "auto",
                     }}
                   >
                     <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
