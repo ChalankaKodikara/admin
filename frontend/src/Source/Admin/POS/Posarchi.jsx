@@ -208,7 +208,7 @@ export default function Posarchi() {
             price: item.price,
           })),
         totalPrice: 0, // Calculate the total price based on your logic
-        productStatus: "", // Set this based on your logic
+        productStatus: "", // Set tclshis based on your logic
         mobileno: customerDetails.phoneNumber,
         role: customerDetails.role,
       };
@@ -732,15 +732,7 @@ export default function Posarchi() {
                       >
                         <TabPanel value={value} index={0} dir={theme.direction}>
                           <Prisoner />
-                        </TabPanel>
-                        <TabPanel value={value} index={1} dir={theme.direction}>
-                          <Jailer />
-                        </TabPanel>
-                        <TabPanel value={value} index={2} dir={theme.direction}>
-                          <Registerd />
-                        </TabPanel>
-                      </SwipeableViews>
-                      <Button
+                          <Button
                         variant="contained"
                         style={{
                           position: "fixed",
@@ -749,7 +741,7 @@ export default function Posarchi() {
                           width: "500px",
                           height: "50px",
                           borderRadius: "10px",
-                        }}
+                          marginTop: "25px"                        }}
                         onClick={() => {
                           sendDataToEndpoint();
                           handleCloseModal(); // Assuming you also want to close the modal
@@ -757,6 +749,15 @@ export default function Posarchi() {
                       >
                         Print & Complete Order
                       </Button>
+                        </TabPanel>
+                        <TabPanel value={value} index={1} dir={theme.direction}>
+                          <Jailer />
+                        </TabPanel>
+                        <TabPanel value={value} index={2} dir={theme.direction}>
+                          <Registerd />
+                        </TabPanel>
+                      </SwipeableViews>
+                     
                     </Box>
                   </Modal>
                 </Box>

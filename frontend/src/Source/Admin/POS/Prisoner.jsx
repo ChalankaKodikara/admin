@@ -106,6 +106,72 @@ const HorizontalLinearStepper = () => {
     });
   };
 
+  const handleCloseModal = () => {
+    // Define the logic to close the modal here
+    console.log("Modal closed");
+    // You can add your specific logic to close the modal
+  };
+  const sendDataToEndpoint = async () => {
+    try {
+      // Retrieve data from local storage
+      const storedCartData = localStorage.getItem("cart");
+      const storedCart = storedCartData ? JSON.parse(storedCartData) : [];
+
+      // Extract customer details from local storage
+      const customerDetails = JSON.parse(localStorage.getItem("inputData"));
+
+      // Create the final payload structure
+      const payload = {
+        customerName: customerDetails.customerName,
+        customerdetails: [
+          {
+            PresonserId: customerDetails.PresonserId,
+            WardNo: customerDetails.WardNo,
+          },
+        ],
+        products: storedCart
+          .filter((item) => item.productName) // Filter out items without productName
+          .map((item) => ({
+            productName: item.productName,
+            itemid: item.itemid,
+            date: item.date,
+            meal: item.meal,
+            price: item.price,
+          })),
+        totalPrice: 0, // Calculate the total price based on your logic
+        productStatus: "", // Set tclshis based on your logic
+        mobileno: customerDetails.phoneNumber,
+        role: customerDetails.role,
+      };
+
+      console.log("Sending data to the server:", payload);
+
+      // Make the HTTP POST request to the specified endpoint
+      const response = await fetch(
+        "https://backprison.talentfort.live/api/v1/addsale",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // You can handle the response here if needed
+      const responseData = await response.json();
+      console.log("Response from the server:", responseData);
+
+      // Optionally, you can clear the local storage after successful submission
+      localStorage.removeItem("cart");
+    } catch (error) {
+      console.error("Error sending data to the endpoint:", error.message);
+    }
+  };
   const sendOTP = async () => {
     // Extract data from the form fields
     const { prisonersName, phoneNumber, wardNumber, prisonerNumber } =
@@ -483,6 +549,27 @@ const HorizontalLinearStepper = () => {
           </Button>
         </Box>
       </React.Fragment>
+      <div style={{ marginTop: "40px" }}>
+        <Button
+          variant="contained"
+          style={{
+            position: "fixed",
+            bottom: "10px",
+            right: "10px",
+            width: "500px",
+            height: "50px",
+            borderRadius: "10px",
+            marginTop: "25px",
+          }}
+
+          onClick={() => {
+            sendDataToEndpoint();
+            handleCloseModal();
+          }}
+        >
+          Print & Complete
+        </Button>{" "}
+      </div>
     </Box>
   );
 };
