@@ -27,7 +27,7 @@ const HorizontalLinearStepper = () => {
   const [receiverDetails, setReceiverDetails] = React.useState({
     Designation: "",
     fname: "",
-    lname:"",
+    lname: "",
     phoneNumber: "",
     section: "",
     employeeid: "",
@@ -54,10 +54,15 @@ const HorizontalLinearStepper = () => {
 
     // Save input fields in local storage when moving to the next step
     if (activeStep === 0) {
-      const { Designation,customerName, phoneNumber, section, prisonerNumber } =
-        receiverDetails;
+      const {
+        Designation,
+        customerName,
+        phoneNumber,
+        section,
+        prisonerNumber,
+      } = receiverDetails;
       const inputData = {
-        designation:Designation,
+        designation: Designation,
         customerName: customerName,
         mobileno: phoneNumber,
         section: section,
@@ -101,7 +106,7 @@ const HorizontalLinearStepper = () => {
   const handleReset = () => {
     setActiveStep(0);
     setReceiverDetails({
-      Designation:"",
+      Designation: "",
       customerName: "",
       phoneNumber: "",
       section: "",
@@ -129,7 +134,9 @@ const HorizontalLinearStepper = () => {
         customerName: customerDetails.customerName,
         customerdetails: [
           {
-            PresonserId: customerDetails.PresonserId,
+            employeeid: customerDetails.employeeid,
+            Designation: customerDetails.Designation,
+            section:customerDetails.section,
             WardNo: customerDetails.WardNo,
           },
         ],
@@ -144,7 +151,7 @@ const HorizontalLinearStepper = () => {
           })),
         totalPrice: 0, // Calculate the total price based on your logic
         productStatus: "", // Set tclshis based on your logic
-        mobileno: customerDetails.phoneNumber,
+        mobileno: customerDetails.mobileno,
         role: customerDetails.role,
       };
 
@@ -172,24 +179,32 @@ const HorizontalLinearStepper = () => {
 
       // Optionally, you can clear the local storage after successful submission
       localStorage.removeItem("cart");
+      localStorage.removeItem("inputData"); 
+
     } catch (error) {
       console.error("Error sending data to the endpoint:", error.message);
     }
   };
   const sendOTP = async () => {
     // Extract data from the form fields
-    const {Designation, customerName, customerLastName,phoneNumber, section, prisonerNumber } =
-      receiverDetails;
+    const {
+      Designation,
+      customerName,
+      customerLastName,
+      phoneNumber,
+      section,
+      prisonerNumber,
+    } = receiverDetails;
 
     // Prepare the data to be sent
     const data = {
-      designation : Designation,
+      designation: Designation,
       fname: customerName,
       lname: customerLastName,
       mobileno: phoneNumber,
       presonerid: prisonerNumber,
       section: section,
-      password :phoneNumber,
+      password: phoneNumber,
     };
 
     try {
@@ -529,6 +544,26 @@ const HorizontalLinearStepper = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+            <div style={{ marginTop: "40px", marginLeft: "600px" }}>
+              <Button
+                variant="contained"
+                style={{
+                  position: "relative",
+                  bottom: "10px",
+                  right: "10px",
+                  width: "500px",
+                  height: "50px",
+                  borderRadius: "10px",
+                  marginTop: "25px",
+                }}
+                onClick={() => {
+                  sendDataToEndpoint();
+                  handleCloseModal();
+                }}
+              >
+                Print & Complete
+              </Button>
+            </div>
           </div>
         );
 
@@ -577,209 +612,17 @@ const HorizontalLinearStepper = () => {
             </Button>
           )}
           <Button
-            onClick={activeStep === steps.length - 1 ? handleReset : handleNext}
+            onClick={
+              activeStep === steps.length - 1 ? sendDataToEndpoint : handleNext
+            }
           >
             {activeStep === steps.length - 1 ? "Order Complete" : "Next"}
           </Button>
         </Box>
       </React.Fragment>
-      <div style={{ marginTop: "40px" }}>
-        <Button
-          variant="contained"
-          style={{
-            position: "fixed",
-            bottom: "10px",
-            right: "10px",
-            width: "500px",
-            height: "50px",
-            borderRadius: "10px",
-            marginTop: "25px",
-          }}
-          onClick={() => {
-            sendDataToEndpoint();
-            handleCloseModal();
-          }}
-        >
-          Print & Complete
-        </Button>{" "}
-      </div>
+      
     </Box>
   );
 };
 
 export default HorizontalLinearStepper;
-
-// import * as React from "react";
-// import Box from "@mui/material/Box";
-// import Stepper from "@mui/material/Stepper";
-// import Step from "@mui/material/Step";
-// import StepLabel from "@mui/material/StepLabel";
-// import Typography from "@mui/material/Typography";
-// import TextField from "@mui/material/TextField";
-// import Button from "@mui/material/Button";
-
-// const steps = ["Reciver Details ", "Bill print", "Oder Complete!"];
-
-// const HorizontalLinearStepper = () => {
-//   const [activeStep, setActiveStep] = React.useState(0);
-//   const [skipped, setSkipped] = React.useState(new Set());
-
-//   const isStepOptional = (step) => {
-//     return step === 1;
-//   };
-
-//   const isStepSkipped = (step) => {
-//     return skipped.has(step);
-//   };
-
-//   const handleNext = () => {
-//     let newSkipped = skipped;
-//     if (isStepSkipped(activeStep)) {
-//       newSkipped = new Set(newSkipped.values());
-//       newSkipped.delete(activeStep);
-//     }
-
-//     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-//     setSkipped(newSkipped);
-//   };
-
-//   const handleBack = () => {
-//     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-//   };
-
-//   const handleSkip = () => {
-//     if (!isStepOptional(activeStep)) {
-//       throw new Error("You can't skip a step that isn't optional.");
-//     }
-
-//     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-//     setSkipped((prevSkipped) => {
-//       const newSkipped = new Set(prevSkipped.values());
-//       newSkipped.add(activeStep);
-//       return newSkipped;
-//     });
-//   };
-
-//   const getStepContent = (step) => {
-//     switch (step) {
-//       case 0:
-//         return (
-//           <div>
-//             <TextField
-//               label="Jailer's Name"
-//               id="outlined-start-adornment"
-//               sx={{ m: 1, width: "50ch" }}
-//             />
-//             <TextField
-//               label="Jailer's Phone Number"
-//               id="outlined-start-adornment"
-//               sx={{ m: 1, width: "50ch" }}
-//             />
-//             <Button
-//               variant="contained"
-//               style={{
-//                 marginRight: "10px",
-//                 width: "150px",
-//                 height: "50px",
-//                 borderRadius: "10px",
-//                 marginTop: "10px",
-//               }}
-//             >
-//               Send OTP
-//             </Button>
-//             <TextField
-//               label="OTP "
-//               id="outlined-start-adornment"
-//               sx={{ m: 1, width: "50ch" }}
-//             />
-//             <Button
-//               variant="contained"
-//               style={{
-//                 marginRight: "10px",
-//                 width: "150px",
-//                 height: "50px",
-//                 borderRadius: "10px",
-//                 marginTop: "10px",
-//               }}
-//             >
-//               Verify OTP
-//             </Button>
-//             <br />
-//             <TextField
-//               label="Staff ID "
-//               id="outlined-start-adornment"
-//               sx={{ m: 1, width: "50ch" }}
-//             />
-//             <TextField
-//               label="Section"
-//               id="outlined-start-adornment"
-//               sx={{ m: 1, width: "50ch" }}
-//             />
-//             <TextField
-//               label="Designation"
-//               id="outlined-start-adornment"
-//               sx={{ m: 1, width: "50ch" }}
-//             />
-//           </div>
-//         );
-//       case 1:
-//         return <Typography variant="h5">Bill print</Typography>;
-//       case 2:
-//         return <Typography variant="h5">Oder Complete </Typography>;
-//       default:
-//         return "Unknown step";
-//     }
-//   };
-
-//   return (
-//     <Box sx={{ width: "100%" }}>
-//       <Stepper activeStep={activeStep}>
-//         {steps.map((label, index) => {
-//           const stepProps = {};
-//           const labelProps = {};
-//           if (isStepOptional(index)) {
-//             labelProps.optional = (
-//               <Typography variant="caption">Optional</Typography>
-//             );
-//           }
-//           if (isStepSkipped(index)) {
-//             stepProps.completed = false;
-//           }
-//           return (
-//             <Step key={label} {...stepProps}>
-//               <StepLabel {...labelProps}>{label}</StepLabel>
-//             </Step>
-//           );
-//         })}
-//       </Stepper>
-//       <React.Fragment>
-//         <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-
-//         {getStepContent(activeStep)}
-//         <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-//           <Button
-//             color="inherit"
-//             disabled={activeStep === 0}
-//             onClick={handleBack}
-//             sx={{ mr: 1 }}
-//           >
-//             Back
-//           </Button>
-//           <Box sx={{ flex: "1 1 auto" }} />
-//           {/* {isStepOptional(activeStep) && (
-//             <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-//               Skip
-//             </Button>
-//           )} */}
-//           {activeStep !== steps.length - 1 && (
-//             <Button onClick={handleNext}>
-//               {activeStep === steps.length - 2 ? "Order Complete" : "Next"}
-//             </Button>
-//           )}
-//         </Box>
-//       </React.Fragment>
-//     </Box>
-//   );
-// };
-
-// export default HorizontalLinearStepper;

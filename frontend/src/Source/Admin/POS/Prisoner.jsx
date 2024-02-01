@@ -168,6 +168,8 @@ const HorizontalLinearStepper = () => {
 
       // Optionally, you can clear the local storage after successful submission
       localStorage.removeItem("cart");
+      localStorage.removeItem("inputData"); 
+
     } catch (error) {
       console.error("Error sending data to the endpoint:", error.message);
     }
@@ -547,32 +549,15 @@ const HorizontalLinearStepper = () => {
             </Button>
           )}
           <Button
-            onClick={activeStep === steps.length - 1 ? handleReset : handleNext}
+            onClick={
+              activeStep === steps.length - 1 ? sendDataToEndpoint : handleNext
+            }
           >
             {activeStep === steps.length - 1 ? "Order Complete" : "Next"}
           </Button>
         </Box>
       </React.Fragment>
-      <div style={{ marginTop: "40px" }}>
-        <Button
-          variant="contained"
-          style={{
-            position: "fixed",
-            bottom: "10px",
-            right: "10px",
-            width: "500px",
-            height: "50px",
-            borderRadius: "10px",
-            marginTop: "25px",
-          }}
-          onClick={() => {
-            sendDataToEndpoint();
-            handleCloseModal();
-          }}
-        >
-          Print & Complete
-        </Button>{" "}
-      </div>
+      
     </Box>
   );
 };
