@@ -543,26 +543,7 @@ const HorizontalLinearStepper = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-            <div style={{ marginTop: "40px", marginLeft: "600px" }}>
-              <Button
-                variant="contained"
-                style={{
-                  position: "relative",
-                  bottom: "10px",
-                  right: "10px",
-                  width: "500px",
-                  height: "50px",
-                  borderRadius: "10px",
-                  marginTop: "25px",
-                }}
-                onClick={() => {
-                  sendDataToEndpoint();
-                  handleCloseModal();
-                }}
-              >
-                Print & Complete
-              </Button>
-            </div>
+            
           </div>
         );
 
