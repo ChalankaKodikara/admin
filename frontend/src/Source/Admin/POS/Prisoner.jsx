@@ -302,7 +302,7 @@ const HorizontalLinearStepper = () => {
             <TextField
               label="Phone Number"
               id="mobileno"
-              sx={{ m: 1, width: "40ch" }}
+              sx={{ m: 1, width: "50ch" }}
               value={receiverDetails.phoneNumber}
               onChange={(e) =>
                 setReceiverDetails((prev) => ({
@@ -311,19 +311,6 @@ const HorizontalLinearStepper = () => {
                 }))
               }
             />
-            <Button
-              variant="contained"
-              style={{
-                marginRight: "10px",
-                width: "200px",
-                height: "50px",
-                borderRadius: "10px",
-                marginTop: "10px",
-              }}
-              onClick={sendOTP}
-            >
-              Send OTP
-            </Button>
 
             <br />
             <TextField
@@ -350,6 +337,23 @@ const HorizontalLinearStepper = () => {
                 }))
               }
             />
+
+            <Button
+              variant="contained"
+              style={{
+                marginRight: "10px",
+                width: "200px",
+                height: "50px",
+                borderRadius: "10px",
+                marginTop: "10px",
+              }}
+              onClick={sendOTP}
+            >
+              Send OTP
+            </Button>
+            <br />
+            <br />
+
             <TextField
               label="OTP "
               id="password"
@@ -561,7 +565,6 @@ const HorizontalLinearStepper = () => {
             borderRadius: "10px",
             marginTop: "25px",
           }}
-
           onClick={() => {
             sendDataToEndpoint();
             handleCloseModal();

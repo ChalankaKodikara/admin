@@ -185,10 +185,10 @@ export default function Posarchi() {
       // Retrieve data from local storage
       const storedCartData = localStorage.getItem("cart");
       const storedCart = storedCartData ? JSON.parse(storedCartData) : [];
-  
+
       // Extract customer details from local storage
       const customerDetails = JSON.parse(localStorage.getItem("inputData"));
-  
+
       // Create the final payload structure
       const payload = {
         customerName: customerDetails.customerName,
@@ -212,33 +212,35 @@ export default function Posarchi() {
         mobileno: customerDetails.phoneNumber,
         role: customerDetails.role,
       };
-  
+
       console.log("Sending data to the server:", payload);
-  
+
       // Make the HTTP POST request to the specified endpoint
-      const response = await fetch("https://backprison.talentfort.live/api/v1/addsale", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-  
+      const response = await fetch(
+        "https://backprison.talentfort.live/api/v1/addsale",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-  
+
       // You can handle the response here if needed
       const responseData = await response.json();
       console.log("Response from the server:", responseData);
-  
+
       // Optionally, you can clear the local storage after successful submission
       localStorage.removeItem("cart");
     } catch (error) {
       console.error("Error sending data to the endpoint:", error.message);
     }
   };
-  
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -705,7 +707,7 @@ export default function Posarchi() {
                         bgcolor: "background.paper",
                         transform: "translate(-50%, -50%)",
                         width: 1200,
-                        height: 600,
+                        height: 700,
                         boxShadow: 24,
                         p: 4,
                         minHeight: 200,
@@ -733,31 +735,48 @@ export default function Posarchi() {
                         <TabPanel value={value} index={0} dir={theme.direction}>
                           <Prisoner />
                           <Button
-                        variant="contained"
-                        style={{
-                          position: "fixed",
-                          bottom: "10px",
-                          right: "10px",
-                          width: "500px",
-                          height: "50px",
-                          borderRadius: "10px",
-                          marginTop: "25px"                        }}
-                        onClick={() => {
-                          sendDataToEndpoint();
-                          handleCloseModal(); // Assuming you also want to close the modal
-                        }}
-                      >
-                        Print & Complete Order
-                      </Button>
+                            variant="contained"
+                            style={{
+                              position: "fixed",
+                              bottom: "10px",
+                              right: "10px",
+                              width: "500px",
+                              height: "50px",
+                              borderRadius: "10px",
+                              marginTop: "25px",
+                            }}
+                            onClick={() => {
+                              sendDataToEndpoint();
+                              handleCloseModal(); // Assuming you also want to close the modal
+                            }}
+                          >
+                            Print & Complete Order
+                          </Button>
                         </TabPanel>
                         <TabPanel value={value} index={1} dir={theme.direction}>
                           <Jailer />
+                          <Button
+                            variant="contained"
+                            style={{
+                              position: "fixed",
+                              bottom: "10px",
+                              right: "10px",
+                              width: "500px",
+                              height: "50px",
+                              borderRadius: "10px",
+                            }}
+                            onClick={() => {
+                              sendDataToEndpoint();
+                              handleCloseModal(); // Assuming you also want to close the modal
+                            }}
+                          >
+                            Print & Complete Order
+                          </Button>
                         </TabPanel>
                         <TabPanel value={value} index={2} dir={theme.direction}>
                           <Registerd />
                         </TabPanel>
                       </SwipeableViews>
-                     
                     </Box>
                   </Modal>
                 </Box>
