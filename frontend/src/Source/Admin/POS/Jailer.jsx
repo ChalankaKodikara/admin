@@ -136,7 +136,7 @@ const HorizontalLinearStepper = () => {
           {
             employeeid: customerDetails.employeeid,
             Designation: customerDetails.Designation,
-            section:customerDetails.section,
+            section: customerDetails.section,
             WardNo: customerDetails.WardNo,
           },
         ],
@@ -179,21 +179,20 @@ const HorizontalLinearStepper = () => {
 
       // Optionally, you can clear the local storage after successful submission
       localStorage.removeItem("cart");
-      localStorage.removeItem("inputData"); 
-
+      localStorage.removeItem("inputData");
     } catch (error) {
       console.error("Error sending data to the endpoint:", error.message);
     }
   };
   const sendOTP = async () => {
-    // Extract data from the form fields
+    console.log("receiverDetails before sending OTP:", receiverDetails);
     const {
       Designation,
       customerName,
       customerLastName,
       phoneNumber,
       section,
-      prisonerNumber,
+      employeeid,
     } = receiverDetails;
 
     // Prepare the data to be sent
@@ -202,7 +201,7 @@ const HorizontalLinearStepper = () => {
       fname: customerName,
       lname: customerLastName,
       mobileno: phoneNumber,
-      presonerid: prisonerNumber,
+      employeeid: employeeid,
       section: section,
       password: phoneNumber,
     };
@@ -374,11 +373,11 @@ const HorizontalLinearStepper = () => {
               label="Employee Number"
               id="prisonerid"
               sx={{ m: 1, width: "50ch" }}
-              value={receiverDetails.prisonerNumber}
+              value={receiverDetails.employeeid}
               onChange={(e) =>
                 setReceiverDetails((prev) => ({
                   ...prev,
-                  prisonerNumber: e.target.value,
+                  employeeid: e.target.value,
                 }))
               }
             />
@@ -620,7 +619,6 @@ const HorizontalLinearStepper = () => {
           </Button>
         </Box>
       </React.Fragment>
-      
     </Box>
   );
 };
