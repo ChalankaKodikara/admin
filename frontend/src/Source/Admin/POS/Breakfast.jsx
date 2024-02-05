@@ -95,6 +95,40 @@ export default function ItemCard({ addToCart }) {
         date: moment(selectedDate).format("YYYY/MM/DD"),
         meal:category,
         price,
+        role: "Presoner",
+
+      };
+
+      // Save in local storage
+      const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+      const updatedCart = [...existingCart, cartItem];
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+      handleCloseModal();
+    }
+  };
+
+  const handleAddToCartuser = () => {
+    console.log("product data = ", productData);
+
+    console.log("selected Product = ", selectedProduct);
+
+    console.log("selected Date  = ", selectedDate);
+
+    if (selectedProduct && selectedDate) {
+      // Add to cart using the existing addToCart function
+      addToCart({ product: selectedProduct, date: selectedDate });
+
+      // Save the selected product ID and date in local storage
+      const { itemid, name, price, category } = selectedProduct; // Extract the product details
+      const cartItem = {
+        productName:name,
+        itemid,
+        date: moment(selectedDate).format("YYYY/MM/DD"),
+        meal:category,
+        price,
+        role: "user",
+
       };
 
       // Save in local storage
@@ -238,7 +272,7 @@ export default function ItemCard({ addToCart }) {
                     borderRadius: "10px",
                     marginBottom: "10px", // Add margin to create a gap
                   }}
-                  onClick={handleAddToCart}
+                  onClick={handleAddToCartuser}
                 >
                   Add to Cart
                 </Button>

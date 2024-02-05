@@ -62,6 +62,7 @@ export default function Posarchi() {
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [discountModalOpen, setDiscountModalOpen] = useState(false);
   const [vatModalOpen, setvatModalOpen] = useState(false);
+const userRole = localStorage.getItem('userRole');
 
   const toggleDrawer = () => {
     setOpen(!open);
