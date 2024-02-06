@@ -543,7 +543,6 @@ const HorizontalLinearStepper = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-            
           </div>
         );
 

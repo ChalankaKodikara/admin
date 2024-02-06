@@ -168,8 +168,7 @@ const HorizontalLinearStepper = () => {
 
       // Optionally, you can clear the local storage after successful submission
       localStorage.removeItem("cart");
-      localStorage.removeItem("inputData"); 
-
+      localStorage.removeItem("inputData");
     } catch (error) {
       console.error("Error sending data to the endpoint:", error.message);
     }
@@ -493,7 +492,7 @@ const HorizontalLinearStepper = () => {
                   {storedCart.map((item, index) => (
                     <TableRow key={index}>
                       <TableCell component="th" scope="row">
-                        {item.name}
+                        {item.productName}{" "}
                       </TableCell>
                       <TableCell align="right">{item.price}</TableCell>
                     </TableRow>
@@ -557,7 +556,6 @@ const HorizontalLinearStepper = () => {
           </Button>
         </Box>
       </React.Fragment>
-      
     </Box>
   );
 };

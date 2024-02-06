@@ -6,13 +6,15 @@ import StepLabel from "@mui/material/StepLabel";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
-const steps = [
-  "Receiver Details",
-  "Edit Details",
-  "Bill print",
-  "Order Complete!",
-];
+const steps = ["Receiver Details", "Bill print", "Order Complete!"];
 
 const HorizontalLinearStepper = () => {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -25,7 +27,10 @@ const HorizontalLinearStepper = () => {
     employeeid: "",
     otp: "",
   });
-  const [editMode, setEditMode] = React.useState(false); // New state for edit mode
+  const [editMode, setEditMode] = React.useState(false);
+  const isStepOptional = (step) => {
+    return step === 1;
+  };
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -33,6 +38,71 @@ const HorizontalLinearStepper = () => {
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const sendDataToEndpoint = async () => {
+    try {
+      // Retrieve data from local storage
+      const storedCartData = localStorage.getItem("cart");
+      const storedCart = storedCartData ? JSON.parse(storedCartData) : [];
+
+      // Extract customer details from local storage
+      const customerDetails = JSON.parse(localStorage.getItem("inputData"));
+
+      // Create the final payload structure
+      const payload = {
+        customerName: customerDetails.customerName,
+        customerdetails: [
+          {
+            employeeid: customerDetails.employeeid,
+            Designation: customerDetails.Designation,
+            section: customerDetails.section,
+            WardNo: customerDetails.WardNo,
+          },
+        ],
+        products: storedCart
+          .filter((item) => item.productName) // Filter out items without productName
+          .map((item) => ({
+            productName: item.productName,
+            itemid: item.itemid,
+            date: item.date,
+            meal: item.meal,
+            price: item.price,
+          })),
+        totalPrice: 0, // Calculate the total price based on your logic
+        productStatus: "", // Set this based on your logic
+        mobileno: customerDetails.mobileno,
+        role: customerDetails.role,
+      };
+
+      console.log("Sending data to the server:", payload);
+
+      // Make the HTTP POST request to the specified endpoint
+      const response = await fetch(
+        "https://backprison.talentfort.live/api/v1/addsale",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // You can handle the response here if needed
+      const responseData = await response.json();
+      console.log("Response from the server:", responseData);
+
+      // Optionally, you can clear the local storage after successful submission
+      localStorage.removeItem("cart");
+      localStorage.removeItem("inputData");
+    } catch (error) {
+      console.error("Error sending data to the endpoint:", error.message);
+    }
   };
 
   const handleCheck = async () => {
@@ -157,19 +227,47 @@ const HorizontalLinearStepper = () => {
                 borderRadius: "10px",
                 marginTop: "10px",
               }}
-              onClick={() => setEditMode(true)}
+              onClick={() => setEditMode((prevEditMode) => !prevEditMode)}
               disabled={!receiverDetails.employeeid}
             >
-              Edit
+              {editMode ? "Update" : "Edit"}
             </Button>
           </div>
         );
 
       case 1:
-        return <Typography variant="h5">Bill print</Typography>;
+        const storedCartData = localStorage.getItem("cart");
+        const storedCart = storedCartData ? JSON.parse(storedCartData) : [];
+
+        return (
+          <div style={{ display: "flex", justifyContent: "center",  }}>
+            <TableContainer component={Paper}>
+              <Table
+                sx={{ minWidth: 100, width: "50%" }}
+                size="small"
+                aria-label="a dense table"
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Items</TableCell>
+                    <TableCell align="right">Price</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {storedCart.map((item, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{item.productName}</TableCell>
+                      <TableCell align="right">{item.price}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        );
 
       case 2:
-        return <Typography variant="h5">Order Complete </Typography>;
+        return <Typography variant="h5">Order Complete</Typography>;
 
       default:
         return "Unknown step";
@@ -179,15 +277,23 @@ const HorizontalLinearStepper = () => {
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper activeStep={activeStep}>
-        {steps.map((label, index) => (
-          <Step key={label} completed={activeStep > index}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
+        {steps.map((label, index) => {
+          const stepProps = {};
+          const labelProps = {};
+          if (isStepOptional(index)) {
+            labelProps.optional = (
+              <Typography variant="caption">Optional</Typography>
+            );
+          }
+          return (
+            <Step key={label} {...stepProps}>
+              <StepLabel {...labelProps}>{label}</StepLabel>
+            </Step>
+          );
+        })}
       </Stepper>
       <React.Fragment>
         <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-
         {getStepContent(activeStep)}
         <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
           <Button
@@ -200,8 +306,13 @@ const HorizontalLinearStepper = () => {
           </Button>
           <Box sx={{ flex: "1 1 auto" }} />
           {activeStep !== steps.length - 1 && (
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 2 ? "Order Complete" : "Next"}
+            <Button color="inherit" onClick={handleNext} variant="contained">
+              Next
+            </Button>
+          )}
+          {activeStep === steps.length - 1 && (
+            <Button onClick={sendDataToEndpoint} variant="contained">
+              Order Complete
             </Button>
           )}
         </Box>
