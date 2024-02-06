@@ -7,7 +7,12 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-const steps = ["Receiver Details", "Edit Details", "Bill print", "Order Complete!"];
+const steps = [
+  "Receiver Details",
+  "Edit Details",
+  "Bill print",
+  "Order Complete!",
+];
 
 const HorizontalLinearStepper = () => {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -20,10 +25,7 @@ const HorizontalLinearStepper = () => {
     employeeid: "",
     otp: "",
   });
-  const [errorMessage, setErrorMessage] = React.useState("");
-  const isStepOptional = (step) => {
-    return step === 1;
-  };
+  const [editMode, setEditMode] = React.useState(false); // New state for edit mode
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -33,38 +35,29 @@ const HorizontalLinearStepper = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const checkEmployeeDetails = async () => {
+  const handleCheck = async () => {
     try {
-      const response = await fetch(
-        `https://backprison.talentfort.live/api/v1/users/details?employeeId=${receiverDetails.employeeid}`
-      );
+      // Simulating API call with a delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const responseData = await response.json();
-      const { fname, lname, mobileno, section } = responseData;
+      // Simulated response data
+      const responseData = {
+        fname: "John",
+        lname: "Doe",
+        mobileno: "1234567890",
+        section: "A",
+      };
 
       setReceiverDetails((prev) => ({
         ...prev,
-        fname,
-        lname,
-        phoneNumber: mobileno,
-        section,
+        fname: responseData.fname,
+        lname: responseData.lname,
+        phoneNumber: responseData.mobileno,
+        section: responseData.section,
       }));
-
     } catch (error) {
       console.error("Error checking employee details:", error.message);
-      setErrorMessage("Error checking employee details. Please try again.");
     }
-  };
-
-  const handleUpdate = async () => {
-    // Perform the update logic here
-
-    // Assume a successful update and move to the next step
-    handleNext();
   };
 
   const getStepContent = (step) => {
@@ -94,42 +87,66 @@ const HorizontalLinearStepper = () => {
                 borderRadius: "10px",
                 marginTop: "10px",
               }}
-              onClick={checkEmployeeDetails}
+              onClick={handleCheck}
             >
               Check
             </Button>
             <br />
             <TextField
-              disabled
               id="fname"
               label="First Name"
               variant="filled"
               sx={{ m: 1, width: "50ch" }}
               value={receiverDetails.fname}
+              disabled={!editMode}
+              onChange={(e) =>
+                setReceiverDetails((prev) => ({
+                  ...prev,
+                  fname: e.target.value,
+                }))
+              }
             />
             <TextField
-              disabled
               id="lname"
               label="Last Name"
               variant="filled"
               sx={{ m: 1, width: "50ch" }}
               value={receiverDetails.lname}
+              disabled={!editMode}
+              onChange={(e) =>
+                setReceiverDetails((prev) => ({
+                  ...prev,
+                  lname: e.target.value,
+                }))
+              }
             />
             <TextField
-              disabled
               id="phoneNumber"
               label="Phone Number"
               variant="filled"
               sx={{ m: 1, width: "50ch" }}
               value={receiverDetails.phoneNumber}
+              disabled={!editMode}
+              onChange={(e) =>
+                setReceiverDetails((prev) => ({
+                  ...prev,
+                  phoneNumber: e.target.value,
+                }))
+              }
             />
             <TextField
-              disabled
               id="section"
               label="Section"
               variant="filled"
               sx={{ m: 1, width: "50ch" }}
               value={receiverDetails.section}
+              disabled={!editMode}
+              onChange={(e) =>
+                setReceiverDetails((prev) => ({
+                  ...prev,
+                  section: e.target.value,
+                }))
+              }
             />
             <Button
               variant="contained"
@@ -140,74 +157,20 @@ const HorizontalLinearStepper = () => {
                 borderRadius: "10px",
                 marginTop: "10px",
               }}
-              onClick={handleUpdate}
+              onClick={() => setEditMode(true)}
+              disabled={!receiverDetails.employeeid}
             >
-              Update
+              Edit
             </Button>
           </div>
-          
         );
+
       case 1:
-        return (
-          <div>
-            <TextField
-              id="edit-fname"
-              label="Edit First Name"
-              variant="filled"
-              sx={{ m: 1, width: "50ch" }}
-              value={receiverDetails.fname}
-              onChange={(e) =>
-                setReceiverDetails((prev) => ({
-                  ...prev,
-                  fname: e.target.value,
-                }))
-              }
-            />
-            <TextField
-              id="edit-lname"
-              label="Edit Last Name"
-              variant="filled"
-              sx={{ m: 1, width: "50ch" }}
-              value={receiverDetails.lname}
-              onChange={(e) =>
-                setReceiverDetails((prev) => ({
-                  ...prev,
-                  lname: e.target.value,
-                }))
-              }
-            />
-            <TextField
-              id="edit-phoneNumber"
-              label="Edit Phone Number"
-              variant="filled"
-              sx={{ m: 1, width: "50ch" }}
-              value={receiverDetails.phoneNumber}
-              onChange={(e) =>
-                setReceiverDetails((prev) => ({
-                  ...prev,
-                  phoneNumber: e.target.value,
-                }))
-              }
-            />
-            <TextField
-              id="edit-section"
-              label="Edit Section"
-              variant="filled"
-              sx={{ m: 1, width: "50ch" }}
-              value={receiverDetails.section}
-              onChange={(e) =>
-                setReceiverDetails((prev) => ({
-                  ...prev,
-                  section: e.target.value,
-                }))
-              }
-            />
-          </div>
-        );
-      case 2:
         return <Typography variant="h5">Bill print</Typography>;
-      case 3:
+
+      case 2:
         return <Typography variant="h5">Order Complete </Typography>;
+
       default:
         return "Unknown step";
     }
@@ -236,9 +199,6 @@ const HorizontalLinearStepper = () => {
             Back
           </Button>
           <Box sx={{ flex: "1 1 auto" }} />
-          {activeStep === 1 && (
-            <Button onClick={handleUpdate}>Update</Button>
-          )}
           {activeStep !== steps.length - 1 && (
             <Button onClick={handleNext}>
               {activeStep === steps.length - 2 ? "Order Complete" : "Next"}
