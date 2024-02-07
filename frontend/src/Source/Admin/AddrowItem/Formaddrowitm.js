@@ -124,7 +124,7 @@ export default function FormAddrowProduct() {
 
     // Send a POST request to the server
     try {
-      const response = await fetch("http://localhost:8084/api/v1/addrowitem", {
+      const response = await fetch("https://backprison.talentfort.live/api/v1/addrowitem", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

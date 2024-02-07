@@ -127,7 +127,7 @@ const SalesReport = () => {
 
       try {
         // Use your API endpoint here
-        const apiUrl = `http://localhost:8084/api/v1/getsalesreports?startdate=${format(
+        const apiUrl = `https://backprison.talentfort.live/api/v1/getsalesreports?startdate=${format(
           startDate,
           "yyyy/MM/dd"
         )}&enddate=${format(endDate, "yyyy/MM/dd")}`;
@@ -190,65 +190,82 @@ const SalesReport = () => {
         />
       </div>
 
-      {totalAmount !== null && (
-        <Card
-          component={Stack}
-          spacing={3}
-          direction="row"
-          sx={{
-            px: 3,
-            py: 5,
-            borderRadius: 2,
-          }}
-        >
-          <Stack spacing={0.5}>
-            <Typography variant="h4">{totalAmount}</Typography>
-            <Typography variant="subtitle2" sx={{ color: "text.disabled" }}>
-              Total Sales Amount
-            </Typography>
-          </Stack>
-        </Card>
-      )}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        {totalAmount !== null && (
+          <Card
+            component={Stack}
+            spacing={3}
+            direction="row"
+            sx={{
+              px: 3,
+              py: 5,
+              borderRadius: 2,
+              backgroundColor: "#f0f8e3",
+              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+              border: "1px solid #c5e1a5",
+            }}
+          >
+            <Stack spacing={0.5}>
+              <Typography variant="h4">{totalAmount}</Typography>
+              <Typography variant="subtitle2" sx={{ color: "text.disabled" }}>
+                Total Sales Amount
+              </Typography>
+            </Stack>
+          </Card>
+        )}
 
-      {totalCashPayment !== null && (
-        <Card
-          component={Stack}
-          spacing={3}
-          direction="row"
-          sx={{
-            px: 3,
-            py: 5,
-            borderRadius: 2,
-          }}
-        >
-          <Stack spacing={0.5}>
-            <Typography variant="h4">{totalCashPayment}</Typography>
-            <Typography variant="subtitle2" sx={{ color: "text.disabled" }}>
-              Total Cash Payment
-            </Typography>
-          </Stack>
-        </Card>
-      )}
+        {totalCashPayment !== null && (
+          <Card
+            component={Stack}
+            spacing={3}
+            direction="row"
+            sx={{
+              px: 3,
+              py: 5,
+              borderRadius: 2,
+              backgroundColor: "#f0f8e3",
+              boxShadow: "0px 2px 4px rgba (0,0,0,0.1)",
+              border: "1px solid #c5e1a5",
+            }}
+          >
+            <Stack spacing={0.5}>
+              <Typography variant="h4">{totalCashPayment}</Typography>
+              <Typography variant="subtitle2" sx={{ color: "text.disabled" }}>
+                Total Cash Payment
+              </Typography>
+            </Stack>
+          </Card>
+        )}
 
-      {totalCardPayment !== null && (
-        <Card
-          component={Stack}
-          spacing={3}
-          direction="row"
-          sx={{
-            px: 3,
-            py: 5,
-            borderRadius: 2,
-          }}
-        >
-          <Stack spacing={0.5}>
-            <Typography variant="h4">{totalCardPayment}</Typography>
-            <Typography variant="subtitle2" sx={{ color: "text.disabled" }}>
-              Total Card Payment
-            </Typography>
-          </Stack>
-        </Card>
-      )}
+        {totalCardPayment !== null && (
+          <Card
+            component={Stack}
+            spacing={3}
+            direction="row"
+            sx={{
+              px: 3,
+              py: 5,
+              borderRadius: 2,
+              backgroundColor: "#f0f8e3",
+              boxShadow: "0px 2px 4px rgba (0, 0, 0, 0.1)",
+              border: "1px solid rgba #c5e1a5",
+            }}
+          >
+            <Stack spacing={0.5}>
+              <Typography variant="h4">{totalCardPayment}</Typography>
+              <Typography variant="subtitle2" sx={{ color: "text.disabled" }}>
+                Total Card Payment
+              </Typography>
+            </Stack>
+          </Card>
+        )}
+      </div>
     </div>
   );
 };
@@ -264,7 +281,7 @@ const Topsell = () => {
     const formattedDate = value ? format(value, "yyyy/MM/dd") : null;
     console.log("Date", formattedDate);
     // Update the API URL with the formatted date
-    const apiUrl = `http://localhost:8084/api/v1/data/topsellingitems?date=${formattedDate}`;
+    const apiUrl = `https://backprison.talentfort.live/api/v1/data/topsellingitems?date=${formattedDate}`;
 
     console.log("API URLllll:", apiUrl); // Log the API URL
 
@@ -395,7 +412,7 @@ const Table = () => {
 
   useEffect(() => {
     const formattedDate = value ? format(value, "yyyy/MM/dd") : null;
-    const apiUrl = `http://localhost:8084/api/v1/data/topsellingitems?date=${formattedDate}&mealType=${mealType}`;
+    const apiUrl = `https://backprison.talentfort.live/api/v1/data/topsellingitems?date=${formattedDate}&mealType=${mealType}`;
 
     setData([]); // Clear the data before making the API request
 

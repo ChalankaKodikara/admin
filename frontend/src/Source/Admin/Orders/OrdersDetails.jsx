@@ -78,7 +78,7 @@ const OrdersDetails = ({ open, onClose, orders }) => {
             {orders.map((order) => (
               <div key={order.id} style={{ ...receiptStyles }}>
                 <div style={{ textAlign: "center", margin: "auto" }}>
-                  <strong>Ayu-Ventures</strong>
+                  <strong>Mexican Hoppers</strong>
                 </div>
                 <div style={{ textAlign: "center", margin: "auto" }}>
                   <strong>

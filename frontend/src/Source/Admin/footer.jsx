@@ -23,7 +23,7 @@ const Footer = () => {
   };
   const fetchSalesData = async () => {
     try {
-      const response = await axios.get("http://localhost:8084/api/v1/getsales");
+      const response = await axios.get("https://backprison.talentfort.live/api/v1/getsales");
       const salesData = response.data;
       const lastElement = salesData[salesData.length - 1].orderId;
 
@@ -132,7 +132,7 @@ const Footer = () => {
         </Stack>
       </Stack>
       <Typography variant="body2" sx={{ marginTop: "10px" }}>
-        © 2023 Ayu-Ventures. All rights reserved.
+        © 2023 MEXICAN HOPPERS. All rights reserved.
       </Typography>
     </Box>
   );

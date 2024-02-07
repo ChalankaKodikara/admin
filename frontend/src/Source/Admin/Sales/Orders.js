@@ -59,7 +59,7 @@ export default function Orders() {
     const fetchSalesData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8084/api/v1/getsales"
+          "https://backprison.talentfort.live/api/v1/getsales"
         );
         console.log("API Response:", response.data);
 

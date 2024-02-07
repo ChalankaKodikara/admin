@@ -371,7 +371,7 @@ const HorizontalLinearStepper = () => {
               variant="contained"
               style={{
                 marginRight: "10px",
-                width: "150px",
+                width: "200px",
                 height: "50px",
                 borderRadius: "10px",
                 marginTop: "10px",

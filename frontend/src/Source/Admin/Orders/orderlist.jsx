@@ -60,7 +60,7 @@ export default function ProductList() {
     const fetchSalesData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8084/api/v1/data/getorders?meal=${selectedMeal}`
+          `https://backprison.talentfort.live/api/v1/data/getorders?meal=${selectedMeal}`
         );
         console.log("Response:", response);
         const salesData = response.data;
@@ -191,13 +191,13 @@ export default function ProductList() {
   const handleUpdateStatus = async (feeldid, orderstatus) => {
     try {
       // Make an API request to update the order status
-      await axios.put(`http://localhost:8084/api/v1/${feeldid}/update-data`, {
+      await axios.put(`https://backprison.talentfort.live/api/v1/${feeldid}/update-data`, {
         orderstatus,
       });
 
       // Fetch the updated sales data
       const response = await axios.get(
-        `http://localhost:8084/api/v1/data/getorders?meal=${selectedMeal}`
+        `https://backprison.talentfort.live/api/v1/data/getorders?meal=${selectedMeal}`
       );
       const updatedSalesData = response.data.map((product, index) => ({
         id: index + 1,

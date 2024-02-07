@@ -7,7 +7,6 @@ import {
 import { RequireAuth } from "react-auth-kit";
 import { AuthProvider } from "react-auth-kit";
 
-
 import DashboardContent from "./Source/Admin/dashboard";
 import Customers from "./Source/Admin/Userlist/customers";
 import Products from "./Source/Admin/ProductList/products";
@@ -26,15 +25,14 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          
-          <Route
+          {/* <Route
             path="/userinterface"
             element={
               <RequireAuth loginPath="/">
               </RequireAuth>
             }
-          />
-          
+          /> */}
+
           <Route path="/dashboard" element={<DashboardContent />} />
           <Route path="/customers" element={<Customers />} />
           <Route path="/products" element={<Products />} />
