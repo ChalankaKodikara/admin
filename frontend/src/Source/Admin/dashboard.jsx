@@ -45,15 +45,15 @@ export default function DashboardContent() {
     }
   }, []);
 
-  useEffect(() => {
-    // Fetch humidity and temperature data from API
-    fetch("https://backprison.talentfort.live/api/v1/data")
-      .then((response) => response.json())
-      .then((data) => {})
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   // Fetch humidity and temperature data from API
+  //   fetch("http://localhost:8084/api/v1/data")
+  //     .then((response) => response.json())
+  //     .then((data) => {})
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // }, []);
 
   return (
     <ThemeProvider theme={mdTheme}>

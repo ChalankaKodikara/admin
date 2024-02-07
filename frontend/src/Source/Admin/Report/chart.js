@@ -127,7 +127,7 @@ const SalesReport = () => {
 
       try {
         // Use your API endpoint here
-        const apiUrl = `https://backprison.talentfort.live/api/v1/getsalesreports?startdate=${format(
+        const apiUrl = `http://localhost:8084/api/v1/getsalesreports?startdate=${format(
           startDate,
           "yyyy/MM/dd"
         )}&enddate=${format(endDate, "yyyy/MM/dd")}`;
@@ -281,7 +281,7 @@ const Topsell = () => {
     const formattedDate = value ? format(value, "yyyy/MM/dd") : null;
     console.log("Date", formattedDate);
     // Update the API URL with the formatted date
-    const apiUrl = `https://backprison.talentfort.live/api/v1/data/topsellingitems?date=${formattedDate}`;
+    const apiUrl = `http://localhost:8084/api/v1/data/topsellingitems?date=${formattedDate}`;
 
     console.log("API URLllll:", apiUrl); // Log the API URL
 
@@ -412,7 +412,7 @@ const Table = () => {
 
   useEffect(() => {
     const formattedDate = value ? format(value, "yyyy/MM/dd") : null;
-    const apiUrl = `https://backprison.talentfort.live/api/v1/data/topsellingitems?date=${formattedDate}&mealType=${mealType}`;
+    const apiUrl = `http://localhost:8084/api/v1/data/topsellingitems?date=${formattedDate}&mealType=${mealType}`;
 
     setData([]); // Clear the data before making the API request
 

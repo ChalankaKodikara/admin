@@ -116,7 +116,7 @@ export default function FormEditProduct() {
       promotionStatus: promotionStatus,
     };
 
-    fetch(`https://backprison.talentfort.live/api/v1/updateproduct/${currentProductId}`, {
+    fetch(`http://localhost:8084/api/v1/updateproduct/${currentProductId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

@@ -6,7 +6,7 @@ const useSalesData = (dataType, numberOfDays) => {
 
   useEffect(() => {
     // Fetch sales data from backend API
-    fetch("https://backprison.talentfort.live/api/v1/getsellindata")
+    fetch("http://localhost:8084/api/v1/getsellindata")
       .then((response) => response.json())
       .then((salesData) => {
         // Process the sales data based on the dataType parameter
