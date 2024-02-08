@@ -258,15 +258,12 @@ const HorizontalLinearStepper = () => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      // You can handle the response here if needed
       const responseData = await response.json();
       console.log("Mobile Number Verified:", responseData);
 
-      // Set loginSuccess to true upon successful login
       setLoginSuccess(true);
 
-      // Move to the next step or perform additional actions if login is successful
-      // handleNext();
+      
     } catch (error) {
       console.error("Error logging in:", error.message);
 

@@ -160,7 +160,7 @@ const HorizontalLinearStepper = () => {
                 borderRadius: "10px",
                 marginTop: "10px",
               }}
-              onClick={handleCheck} // Call handleCheck when the button is clicked
+              onClick={handleCheck} 
             >
               Check
             </Button>
