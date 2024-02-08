@@ -51,7 +51,7 @@ export default function Customers() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Customers
+              Registed Staff
             </Typography>
           </Toolbar>
         </AppBar>
