@@ -38,7 +38,7 @@ export default function SignUpPage() {
       return;
     }
 
-    fetch("http://localhost:8084/api/v1/signup", {
+    fetch("https://backprison.talentfort.live/api/v1/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -90,7 +90,7 @@ const Form = () => {
 
     try {
       const addSaleResponse = await axios.post(
-        "http://localhost:8084/api/v1/addsale",
+        "https://backprison.talentfort.live/api/v1/addsale",
         apiData
       );
 

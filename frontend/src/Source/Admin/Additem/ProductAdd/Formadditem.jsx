@@ -97,7 +97,7 @@ export default function FormAddProduct() {
     setHasErrors(false);
 
     try {
-      const response = await fetch("http://localhost:8084/api/v1/additem", {
+      const response = await fetch("https://backprison.talentfort.live/api/v1/additem", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

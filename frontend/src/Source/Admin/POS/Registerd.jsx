@@ -107,17 +107,20 @@ const HorizontalLinearStepper = () => {
 
   const handleCheck = async () => {
     try {
-      // Simulating API call with a delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Make a network request to fetch employee details
+      const response = await fetch(
+        `https://backprison.talentfort.live/api/v1/users/details?employeeId=${receiverDetails.employeeid}`
+      );
 
-      // Simulated response data
-      const responseData = {
-        fname: "John",
-        lname: "Doe",
-        mobileno: "1234567890",
-        section: "A",
-      };
+      // Check if the request was successful
+      if (!response.ok) {
+        throw new Error("Failed to fetch employee details");
+      }
 
+      // Parse the response data as JSON
+      const responseData = await response.json();
+
+      // Update receiver details with the fetched data
       setReceiverDetails((prev) => ({
         ...prev,
         fname: responseData.fname,
@@ -157,7 +160,7 @@ const HorizontalLinearStepper = () => {
                 borderRadius: "10px",
                 marginTop: "10px",
               }}
-              onClick={handleCheck}
+              onClick={handleCheck} // Call handleCheck when the button is clicked
             >
               Check
             </Button>
@@ -240,7 +243,7 @@ const HorizontalLinearStepper = () => {
         const storedCart = storedCartData ? JSON.parse(storedCartData) : [];
 
         return (
-          <div style={{ display: "flex", justifyContent: "center",  }}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
             <TableContainer component={Paper}>
               <Table
                 sx={{ minWidth: 100, width: "50%" }}

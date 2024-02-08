@@ -57,7 +57,7 @@ export default function ProductList() {
     const fetchSalesData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8084/api/v1/data/items"
+          "https://backprison.talentfort.live/api/v1/data/items"
         );
         console.log("API Response:", response.data);
 
@@ -93,7 +93,7 @@ export default function ProductList() {
         "Are you sure you want to delete this row?"
       );
       if (confirmed) {
-        await axios.delete(`http://localhost:8084/api/v1/deleteitem/${pid}`);
+        await axios.delete(`https://backprison.talentfort.live/api/v1/deleteitem/${pid}`);
         // Handle success response, if needed
         // Refresh the list of items or update UI accordingly
         const updatedSalesData = salesData.filter((sale) => sale.pid !== pid);

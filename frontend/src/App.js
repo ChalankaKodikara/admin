@@ -6,7 +6,8 @@ import {
 } from "react-router-dom";
 import { RequireAuth } from "react-auth-kit";
 import { AuthProvider } from "react-auth-kit";
-
+import Userlogin from "./Source/User/userlogin";
+import SignUpPage from "./Source/User/usersignup";
 import DashboardContent from "./Source/Admin/dashboard";
 import Customers from "./Source/Admin/Userlist/customers";
 import Products from "./Source/Admin/ProductList/products";
@@ -25,10 +26,14 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
+          <Route path="/" element={<Userlogin />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          {/* <Route path="/userinterface" element={<UserInterface />} /> */}
           {/* <Route
             path="/userinterface"
             element={
               <RequireAuth loginPath="/">
+                <UserInterface />
               </RequireAuth>
             }
           /> */}

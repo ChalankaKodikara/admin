@@ -9,7 +9,7 @@ const OrderList = () => {
       try {
         const email = localStorage.getItem("userEmail");
         const response = await fetch(
-          `http://localhost:8084/api/v1/getuserorders/${email}`
+          `https://backprison.talentfort.live/api/v1/getuserorders/${email}`
         );
         if (response.ok) {
           const data = await response.json();
