@@ -64,9 +64,9 @@ export const mainListItems = (
     </Link>
 
     <a
-      href="/userinterface" // Replace with the correct URL for "userinterface"
-      target="_blank" // This opens the link in a new tab
-      rel="noopener noreferrer" // Required for security reasons
+      href="/userinterface"
+      target="_blank" 
+      rel="noopener noreferrer" 
       style={{ textDecoration: "none", color: "inherit" }}
     >
       <ListItemButton>
